@@ -1,10 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Player Leaderboard</title>
+    <title>Elo Leaderboard</title>
 
     <style>
         * {
@@ -13,7 +14,7 @@
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             background: #111827;
             color: white;
         }
@@ -42,7 +43,7 @@
             background: #1f2937;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .player {
@@ -83,15 +84,14 @@
 
         .headers {
             background: #374151;
-            font-size: 14px;
             color: #d1d5db;
+            font-size: 14px;
         }
 
         .error {
-            background: #7f1d1d;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
             text-align: center;
+            color: #fca5a5;
         }
 
         @media (max-width: 600px) {
@@ -115,13 +115,13 @@
 <body>
 
 <header>
-    <h1>🏆 Player Leaderboard</h1>
-    <p>Elo ratings and wins</p>
+    <h1>🏆 Elo Leaderboard</h1>
+    <p>Player rankings and wins</p>
 </header>
 
 <div class="container">
 
-    <div id="leaderboard" class="leaderboard">
+    <div class="leaderboard">
 
         <div class="player headers">
             <div>#</div>
@@ -142,54 +142,81 @@
 
 async function loadPlayers() {
 
-    const playersContainer = document.getElementById("players");
+    const container = document.getElementById("players");
 
     try {
 
-        // Load the JSON file
-        const response = await fetch("players.json");
+        // Load your JSON database
+        const response = await fetch("elo_db.json");
 
         if (!response.ok) {
-            throw new Error("Could not load players.json");
+            throw new Error("Could not load elo_db.json");
         }
 
-        const players = await response.json();
+        const data = await response.json();
 
-        // Sort players by Elo, highest first
+        // Convert:
+        // {
+        //   "PlayerName": {
+        //      "elo": 1000,
+        //      "wins": 5
+        //   }
+        // }
+        //
+        // into an array
+        const players = Object.entries(data).map(([name, stats]) => ({
+            name: name,
+            elo: stats.elo ?? 0,
+            wins: stats.wins
+        }));
+
+        // Sort by Elo, highest first
         players.sort((a, b) => b.elo - a.elo);
 
-        playersContainer.innerHTML = "";
+        container.innerHTML = "";
 
         players.forEach((player, index) => {
 
-            const playerElement = document.createElement("div");
+            const row = document.createElement("div");
 
-            playerElement.className = "player";
+            row.className = "player";
 
-            playerElement.innerHTML = `
+            // Show "—" if the JSON doesn't contain wins
+            const wins = player.wins !== undefined
+                ? player.wins
+                : "—";
+
+            row.innerHTML = `
                 <div class="rank">${index + 1}</div>
-                <div class="name">${player.name}</div>
+                <div class="name">${escapeHTML(player.name)}</div>
                 <div class="elo">${player.elo}</div>
-                <div class="wins">${player.wins}</div>
+                <div class="wins">${wins}</div>
             `;
 
-            playersContainer.appendChild(playerElement);
-
+            container.appendChild(row);
         });
 
     } catch (error) {
 
-        playersContainer.innerHTML = `
-            <div class="error">
-                Failed to load player data.<br>
-                Make sure <strong>elo_db.json</strong> exists.
-            </div>
-        `;
-
         console.error(error);
 
+        container.innerHTML = `
+            <div class="error">
+                Could not load <strong>elo_db.json</strong>.
+                Make sure it is in the same folder as index.html.
+            </div>
+        `;
     }
 }
+
+
+// Prevent player names containing HTML from affecting the page
+function escapeHTML(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 
 loadPlayers();
 
@@ -197,3 +224,4 @@ loadPlayers();
 
 </body>
 </html>
+```
