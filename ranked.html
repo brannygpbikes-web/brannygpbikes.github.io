@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranked - GP Bikes Academy Ranked</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  body.ranked-page {
+    background-image: url("background.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+
+  body.ranked-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: -1;
+  }
+
+  .content {
+    padding: 40px 20px;
+  }
+
+  .content h1 {
+    text-align: center;
+    margin: 0 0 6px;
+    font-size: 38px;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.8);
+  }
+
+  .content .subtitle {
+    text-align: center;
+    color: #dddddd;
+    font-size: 16px;
+    margin: 0 0 30px;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: auto;
+  }
+
+  .leaderboard {
+    background: rgba(17, 24, 39, 0.92);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
+
+  .player {
+    display: grid;
+    grid-template-columns: 70px 1fr 150px 120px;
+    align-items: center;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.2s;
+  }
+
+  .player:last-child {
+    border-bottom: none;
+  }
+
+  .player:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .rank {
+    color: #9ca3af;
+    font-weight: bold;
+  }
+
+  .name {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .elo {
+    color: #60a5fa;
+    font-weight: bold;
+  }
+
+  .wins {
+    color: #34d399;
+    font-weight: bold;
+  }
+
+  .headers {
+    background: rgba(55, 65, 81, 0.95);
+    color: #d1d5db;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  .error {
+    padding: 20px;
+    text-align: center;
+    color: #fca5a5;
+  }
+
+  @media (max-width: 600px) {
+    .content h1 { font-size: 28px; }
+    .player {
+      grid-template-columns: 40px 1fr 80px 70px;
+      padding: 15px 10px;
+    }
+    .name { font-size: 15px; }
+    .elo, .wins { font-size: 14px; }
+  }
+</style>
+</head>
+<body class="ranked-page">
+
+  <header class="topbar">
+    <div class="brand">GP Bikes Academy Ranked</div>
+  </header>
+
+  <nav class="sidebar">
+    <a href="ranked.html" class="active"><i class="fas fa-trophy"></i><span class="label">Ranked</span></a>
+    <a href="https://discord.gg/YOUR-INVITE-CODE" target="_blank" rel="noopener noreferrer" class="discord-link">
+      <i class="fab fa-discord"></i><span class="label">Join the Discord</span>
+    </a>
+  </nav>
+
+  <main class="page">
+    <div class="content">
+      <h1>Season Rankings</h1>
+      <p class="subtitle">Race. Win. Repeat.</p>
+
+      <div class="container">
+        <div class="leaderboard">
+          <div class="player headers">
+            <div>N°</div>
+            <div>Player</div>
+            <div>Elo</div>
+            <div>Wins</div>
+          </div>
+          <div id="players"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script>
+async function loadPlayers() {
+  const container = document.getElementById("players");
+  try {
+    const response = await fetch("elo_db.json");
+    if (!response.ok) {
+      throw new Error("Could not load elo_db.json");
+    }
+    const data = await response.json();
+
+    const players = Object.entries(data).map(([name, stats]) => ({
+      name: name,
+      elo: stats.elo ?? 0,
+      wins: stats.wins
+    }));
+
+    players.sort((a, b) => b.elo - a.elo);
+
+    container.innerHTML = "";
+    players.forEach((player, index) => {
+      const row = document.createElement("div");
+      row.className = "player";
+      const wins = player.wins !== undefined ? player.wins : "—";
+      row.innerHTML = `
+        <div class="rank">${index + 1}</div>
+        <div class="name">${escapeHTML(player.name)}</div>
+        <div class="elo">${player.elo}</div>
+        <div class="wins">${wins}</div>
+      `;
+      container.appendChild(row);
+    });
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = `
+      <div class="error">
+        Could not load <strong>elo_db.json</strong>.<br>
+        Make sure it is in the same folder as index.html.
+      </div>
+    `;
+  }
+}
+
+function escapeHTML(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+loadPlayers();
+</script>
+
+</body>
+</html>
