@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Player Leaderboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111827;
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px 25px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        header p {
+            color: #9ca3af;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .leaderboard {
+            background: #1f2937;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .player {
+            display: grid;
+            grid-template-columns: 70px 1fr 150px 120px;
+            align-items: center;
+            padding: 18px 20px;
+            border-bottom: 1px solid #374151;
+        }
+
+        .player:last-child {
+            border-bottom: none;
+        }
+
+        .player:hover {
+            background: #273449;
+        }
+
+        .rank {
+            color: #9ca3af;
+            font-weight: bold;
+        }
+
+        .name {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .elo {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .wins {
+            color: #34d399;
+            font-weight: bold;
+        }
+
+        .headers {
+            background: #374151;
+            font-size: 14px;
+            color: #d1d5db;
+        }
+
+        .error {
+            background: #7f1d1d;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .player {
+                grid-template-columns: 40px 1fr 80px 70px;
+                padding: 15px 10px;
+            }
+
+            .name {
+                font-size: 15px;
+            }
+
+            .elo,
+            .wins {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🏆 Player Leaderboard</h1>
+    <p>Elo ratings and wins</p>
+</header>
+
+<div class="container">
+
+    <div id="leaderboard" class="leaderboard">
+
+        <div class="player headers">
+            <div>#</div>
+            <div>Player</div>
+            <div>Elo</div>
+            <div>Wins</div>
+        </div>
+
+        <div id="players">
+            Loading...
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+async function loadPlayers() {
+
+    const playersContainer = document.getElementById("players");
+
+    try {
+
+        // Load the JSON file
+        const response = await fetch("players.json");
+
+        if (!response.ok) {
+            throw new Error("Could not load players.json");
+        }
+
+        const players = await response.json();
+
+        // Sort players by Elo, highest first
+        players.sort((a, b) => b.elo - a.elo);
+
+        playersContainer.innerHTML = "";
+
+        players.forEach((player, index) => {
+
+            const playerElement = document.createElement("div");
+
+            playerElement.className = "player";
+
+            playerElement.innerHTML = `
+                <div class="rank">${index + 1}</div>
+                <div class="name">${player.name}</div>
+                <div class="elo">${player.elo}</div>
+                <div class="wins">${player.wins}</div>
+            `;
+
+            playersContainer.appendChild(playerElement);
+
+        });
+
+    } catch (error) {
+
+        playersContainer.innerHTML = `
+            <div class="error">
+                Failed to load player data.<br>
+                Make sure <strong>players.json</strong> exists.
+            </div>
+        `;
+
+        console.error(error);
+
+    }
+}
+
+loadPlayers();
+
+</script>
+
+</body>
+</html>
