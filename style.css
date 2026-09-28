@@ -1,400 +1,254 @@
-```css
-/* =========================================================
-   GP BIKES ACADEMY — RANKED
-   ========================================================= */
+:root {
+  --topbar-h: 60px;
+  --sidebar-w: 220px;
+  --red: #e11d48;
+  --red-dark: #be123c;
+  --bg-dark: rgba(17, 24, 39, 0.92);
+  --bg-header: rgba(55, 65, 81, 0.95);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
 
 * {
   box-sizing: border-box;
-}
-
-:root {
-  --red: #c0181f;
-  --red-dark: #8f1116;
-
-  --sidebar-w: 210px;
-  --topbar-h: 64px;
-
-  --dark: #111827;
-  --dark-2: #0f0f0f;
-  --grey: #374151;
-  --text-grey: #d1d5db;
-}
-
-/* =========================================================
-   BASE
-   ========================================================= */
-
-html,
-body {
   margin: 0;
-  min-height: 100%;
+  padding: 0;
 }
 
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: #ffffff;
-
-  background-color: #111;
   background-image: url("background.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
+  min-height: 100vh;
 }
 
-/* Dark overlay over background */
+/* Dark Overlay */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-
-  background: rgba(0, 0, 0, 0.45);
-
-  pointer-events: none;
+  background: rgba(0, 0, 0, 0.55);
   z-index: -1;
 }
 
 a {
-  color: inherit;
   text-decoration: none;
+  color: inherit;
 }
 
-/* =========================================================
-   TOP BAR
-   ========================================================= */
-
+/* Top Navigation Bar */
 .topbar {
+  height: var(--topbar-h);
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
   position: fixed;
-
   top: 0;
   left: 0;
   right: 0;
-
-  height: var(--topbar-h);
-
-  background: linear-gradient(
-    180deg,
-    var(--red),
-    var(--red-dark)
-  );
-
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
-
-  display: flex;
-  align-items: center;
-
-  padding: 0 20px;
-
   z-index: 100;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .topbar .brand {
   font-size: 20px;
   font-weight: bold;
   letter-spacing: 0.5px;
-
-  text-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-/* =========================================================
-   LEFT SIDEBAR
-   ========================================================= */
-
+/* Sidebar Nav */
 .sidebar {
   position: fixed;
-
   top: var(--topbar-h);
   left: 0;
   bottom: 0;
-
   width: var(--sidebar-w);
-
-  background: rgba(15, 15, 15, 0.92);
-
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-
-  padding-top: 20px;
-
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-right: 1px solid var(--border-color);
   z-index: 90;
 }
 
 .sidebar a {
   display: flex;
   align-items: center;
-
   gap: 12px;
-
-  padding: 14px 22px;
-
-  font-size: 15px;
-  font-weight: bold;
-
-  color: #e5e5e5;
-
-  border-left: 3px solid transparent;
-
-  transition:
-    background 0.15s,
-    border-color 0.15s,
-    color 0.15s;
-}
-
-.sidebar a i {
-  width: 18px;
-
-  text-align: center;
-
+  padding: 12px 16px;
+  border-radius: 8px;
   color: #9ca3af;
-
-  transition: color 0.15s;
+  font-weight: bold;
+  transition: all 0.2s ease;
 }
 
 .sidebar a:hover,
 .sidebar a.active {
-  background: rgba(192, 24, 31, 0.18);
-
-  border-left-color: var(--red);
-
+  background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
 }
 
-.sidebar a:hover i,
-.sidebar a.active i {
-  color: var(--red);
-}
-
-/* Discord separator */
-
-.sidebar .discord-link {
-  margin-top: 10px;
-
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-
-  padding-top: 18px;
-}
-
-/* =========================================================
-   MAIN PAGE
-   ========================================================= */
-
+/* Main Content Wrapper */
 .page {
+  margin-top: var(--topbar-h);
   margin-left: var(--sidebar-w);
-
-  padding-top: var(--topbar-h);
-
-  min-height: 100vh;
-}
-
-.content {
   padding: 40px 20px;
+  min-height: calc(100vh - var(--topbar-h));
 }
 
-/* =========================================================
-   SEASON BAR
-   ========================================================= */
+/* Hero Section */
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
 
-.season-bar {
-  width: 100%;
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 8px;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.8);
+}
 
-  background: rgba(55, 65, 81, 0.95);
+.hero p {
+  color: #e5e5e5;
+  font-size: 18px;
+  margin-bottom: 24px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
 
-  color: var(--text-grey);
+.hero .buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
-  font-size: 14px;
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 8px;
   font-weight: bold;
-
-  text-transform: uppercase;
-
-  padding: 14px 20px;
-
-  margin-bottom: 16px;
-
-  border-radius: 2px;
-
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.25);
+  font-size: 15px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease, background 0.2s ease;
 }
 
-/* =========================================================
-   LEADERBOARD
-   ========================================================= */
+.btn:hover {
+  transform: translateY(-2px);
+}
 
+.btn.primary {
+  background: linear-gradient(180deg, var(--red), var(--red-dark));
+  color: #ffffff;
+}
+
+.btn.discord {
+  background: #5865f2;
+  color: #ffffff;
+}
+
+.btn.discord:hover {
+  background: #4752c4;
+}
+
+/* Leaderboard */
 .container {
-  width: 100%;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 .leaderboard {
-  width: 100%;
-
-  background: rgba(17, 24, 39, 0.92);
-
-  border-radius: 2px;
-
+  background: var(--bg-dark);
+  border-radius: 14px;
   overflow: hidden;
-
-  box-shadow:
-    0 4px 15px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
-
-/* =========================================================
-   PLAYER ROW
-   ========================================================= */
 
 .player {
   display: grid;
-
-  grid-template-columns:
-    70px
-    1fr
-    150px
-    120px;
-
+  grid-template-columns: 70px 1fr 150px 120px;
   align-items: center;
-
-  min-height: 58px;
-
-  padding: 14px 20px;
-
-  border-bottom:
-    1px solid rgba(255, 255, 255, 0.08);
-
-  transition:
-    background 0.2s;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.2s ease;
 }
 
 .player:last-child {
   border-bottom: none;
 }
 
-.player:hover {
+.player:not(.headers):hover {
   background: rgba(255, 255, 255, 0.08);
 }
 
-/* =========================================================
-   TABLE HEADER
-   ========================================================= */
-
-.player.headers {
-  min-height: 48px;
-
-  background: rgba(55, 65, 81, 0.95);
-
-  color: var(--text-grey);
-
+.headers {
+  background: var(--bg-header);
+  color: #d1d5db;
   font-size: 14px;
-
   text-transform: uppercase;
-
-  border-bottom:
-    1px solid rgba(255, 255, 255, 0.08);
+  font-weight: bold;
 }
-
-.player.headers:hover {
-  background: rgba(55, 65, 81, 0.95);
-}
-
-/* =========================================================
-   COLUMNS
-   ========================================================= */
 
 .rank {
   color: #9ca3af;
-
   font-weight: bold;
 }
 
 .name {
-  font-size: 18px;
-
   font-weight: bold;
-
-  color: #ffffff;
-
-  overflow: hidden;
-
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
+  font-size: 18px;
 }
 
 .elo {
   color: #60a5fa;
-
   font-weight: bold;
 }
 
 .wins {
   color: #34d399;
-
   font-weight: bold;
 }
 
-/* =========================================================
-   ERROR
-   ========================================================= */
-
 .error {
-  padding: 20px;
-
+  padding: 24px;
   text-align: center;
-
   color: #fca5a5;
-
-  font-size: 14px;
 }
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-  :root {
-    --sidebar-w: 64px;
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 60px;
+    padding: 15px 5px;
   }
 
-  .topbar {
-    padding: 0 15px;
-  }
-
-  .topbar .brand {
-    font-size: 16px;
-  }
-
-  .sidebar a {
-    justify-content: center;
-
-    padding: 16px 0;
-  }
-
-  .sidebar a span.label {
+  .sidebar .label {
     display: none;
   }
 
-  .sidebar a i {
-    width: auto;
+  .page {
+    margin-left: 60px;
+    padding: 20px 10px;
   }
 
-  .content {
-    padding: 25px 10px;
-  }
-
-  .season-bar {
-    padding: 12px 15px;
-
-    font-size: 13px;
+  .hero h1 {
+    font-size: 30px;
   }
 
   .player {
-    grid-template-columns:
-      40px
-      minmax(0, 1fr)
-      80px
-      70px;
-
-    padding: 15px 10px;
+    grid-template-columns: 40px 1fr 80px 60px;
+    padding: 14px 10px;
   }
 
   .name {
@@ -405,39 +259,4 @@ a {
   .wins {
     font-size: 14px;
   }
-
-  .player.headers {
-    font-size: 12px;
-  }
 }
-
-/* =========================================================
-   VERY SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 420px) {
-
-  .player {
-    grid-template-columns:
-      32px
-      minmax(0, 1fr)
-      65px
-      55px;
-
-    padding: 13px 8px;
-  }
-
-  .name {
-    font-size: 14px;
-  }
-
-  .elo,
-  .wins {
-    font-size: 13px;
-  }
-
-  .player.headers {
-    font-size: 11px;
-  }
-}
-```
