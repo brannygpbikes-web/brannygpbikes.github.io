@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GP Bikes Academy Ranked | Leaderboard</title>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">GP Bikes Academy Ranked</div>
+  </header>
+
+  <nav class="sidebar">
+    <a href="index.html"><i class="fas fa-house"></i><span class="label">Home</span></a>
+    <a href="ranked.html" class="active"><i class="fas fa-trophy"></i><span class="label">Ranked</span></a>
+    <a href="https://discord.gg/YOUR-INVITE-CODE" target="_blank" rel="noopener noreferrer">
+      <i class="fab fa-discord"></i><span class="label">Discord</span>
+    </a>
+  </nav>
+
+  <main class="page">
+    <div class="page-title">
+      <h2>Ranked Leaderboard</h2>
+      <p>Current official standings and Elo ratings.</p>
+    </div>
+
+    <div class="container">
+      <div class="leaderboard">
+        <!-- Table Headings -->
+        <div class="player headers">
+            <div>N°</div>
+            <div>Player</div>
+            <div>Elo</div>
+            <div>Wins</div>
+        </div>
+
+        <!-- Players populated by Script -->
+        <div id="players">
+            <!-- Fallback Static Data -->
+            <div class="player">
+                <div class="rank">1</div>
+                <div class="name">branny</div>
+                <div class="elo">1021</div>
+                <div class="wins">2</div>
+            </div>
+            <div class="player">
+                <div class="rank">2</div>
+                <div class="name">Scorlog</div>
+                <div class="elo">1001</div>
+                <div class="wins">—</div>
+            </div>
+            <div class="player">
+                <div class="rank">3</div>
+                <div class="name">Shai3ackHurts</div>
+                <div class="elo">995</div>
+                <div class="wins">1</div>
+            </div>
+            <div class="player">
+                <div class="rank">4</div>
+                <div class="name">MIRICI</div>
+                <div class="elo">983</div>
+                <div class="wins">0</div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function loadPlayers() {
+        const container = document.getElementById("players");
+
+        try {
+            const response = await fetch("elo_db.json");
+            if (!response.ok) throw new Error("Could not load elo_db.json");
+
+            const data = await response.json();
+
+            const players = Object.entries(data).map(([name, stats]) => ({
+                name: name,
+                elo: stats.elo ?? 0,
+                wins: stats.wins
+            }));
+
+            players.sort((a, b) => b.elo - a.elo);
+            container.innerHTML = "";
+
+            players.forEach((player, index) => {
+                const row = document.createElement("div");
+                row.className = "player";
+
+                const wins = player.wins !== undefined ? player.wins : "—";
+
+                row.innerHTML = `
+                    <div class="rank">${index + 1}</div>
+                    <div class="name">${escapeHTML(player.name)}</div>
+                    <div class="elo">${player.elo}</div>
+                    <div class="wins">${wins}</div>
+                `;
+                container.appendChild(row);
+            });
+
+        } catch (error) {
+            console.warn("Using static fallback HTML:", error.message);
+        }
+    }
+
+    function escapeHTML(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    loadPlayers();
+  </script>
+
+</body>
+</html>
