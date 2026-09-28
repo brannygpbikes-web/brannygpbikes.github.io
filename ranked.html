@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0071)https://brannygpbikes-web.github.io/brannygpbikes.github.io/ranked.html -->
+<!-- saved from url=(0063)file:///C:/Users/44790/Downloads/gemini-code-1790552727261.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,23 +42,20 @@
   }
 
   .container {
-    max-width: 900px;
     margin: auto;
   }
 
   .leaderboard {
     background: rgba(17, 24, 39, 0.92);
-    border-radius: 14px;
+    border-radius: 2px;
     overflow: hidden;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
   }
 
   .player {
     display: grid;
     grid-template-columns: 70px 1fr 150px 120px;
     align-items: center;
-    padding: 18px 20px;
+    padding: 14px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     transition: background 0.2s;
   }
@@ -131,7 +128,7 @@
   <main class="page">
     <div class="content">
       
-      <p class="subtitle"><div class="player headers">
+      <div class="player headers">
             <div style="
     width: 100px;
     alignment-baseline: text-after-edge;
@@ -139,7 +136,7 @@
             
             
             
-          </div></p>
+          </div><p></p>
 
       <div class="container">
         <div class="leaderboard">
@@ -149,27 +146,12 @@
             <div>Elo</div>
             <div>Wins</div>
           </div>
-          <div id="players"><div class="player">
-        <div class="rank">1</div>
-        <div class="name">branny</div>
-        <div class="elo">1021</div>
-        <div class="wins">2</div>
-      </div><div class="player">
-        <div class="rank">2</div>
-        <div class="name">Scorlog</div>
-        <div class="elo">1001</div>
-        <div class="wins">—</div>
-      </div><div class="player">
-        <div class="rank">3</div>
-        <div class="name">Shai3ackHurts</div>
-        <div class="elo">995</div>
-        <div class="wins">1</div>
-      </div><div class="player">
-        <div class="rank">4</div>
-        <div class="name">MIRICI</div>
-        <div class="elo">983</div>
-        <div class="wins">0</div>
-      </div></div>
+          <div id="players">
+      <div class="error">
+        Could not load <strong>elo_db.json</strong>.<br>
+        Make sure it is in the same folder as index.html.
+      </div>
+    </div>
         </div>
       </div>
     </div>
