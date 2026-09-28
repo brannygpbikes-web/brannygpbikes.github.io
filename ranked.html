@@ -3,70 +3,51 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>GP Bikes Academy Ranked</title>
 
-    <title>
-        Ranked - GP Bikes Academy
-    </title>
-
-
-    <!-- Font Awesome -->
+    <!-- Font Awesome icons -->
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     >
 
-
     <!-- Main stylesheet -->
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <link rel="stylesheet" href="style.css">
 </head>
-
 
 <body>
 
-
-    <!-- =====================================================
+    <!-- =========================
          TOP BAR
-    ====================================================== -->
+    ========================== -->
 
     <header class="topbar">
 
         <div class="brand">
-            GP Bikes Academy Ranked
+            <i class="fa-solid fa-motorcycle"></i>
+            <span>GP Bikes Academy</span>
+        </div>
+
+        <div class="topbar-title">
+            Ranked
         </div>
 
     </header>
 
 
-    <!-- =====================================================
+    <!-- =========================
          SIDEBAR
-    ====================================================== -->
+    ========================== -->
 
     <nav class="sidebar">
 
-        <a
-            href="ranked.html"
-            class="active"
-        >
-
-            <i class="fas fa-trophy"></i>
-
-            <span class="label">
-                Ranked
-            </span>
-
+        <a href="ranked.html" class="active">
+            <i class="fa-solid fa-trophy"></i>
+            <span class="label">Ranked</span>
         </a>
-
 
         <a
             href="https://discord.gg/NGwKCQ96m8"
@@ -74,90 +55,107 @@
             rel="noopener noreferrer"
             class="discord-link"
         >
-
-            <i class="fab fa-discord"></i>
-
-            <span class="label">
-                Join the Discord
-            </span>
-
+            <i class="fa-brands fa-discord"></i>
+            <span class="label">Join the Discord</span>
         </a>
 
     </nav>
 
 
-    <!-- =====================================================
-         PAGE
-    ====================================================== -->
+    <!-- =========================
+         MAIN PAGE
+    ========================== -->
 
     <main class="page">
 
-
         <div class="content">
 
+            <!-- Page heading -->
 
-            <!-- Season -->
+            <div class="page-heading">
 
-            <div class="season-bar">
-                2026 Ranked
-            </div>
-
-
-            <!-- Leaderboard -->
-
-            <div class="container">
-
-                <div class="leaderboard">
-
-
-                    <!-- Table headings -->
-
-                    <div class="player headers">
-
-                        <div>
-                            N°
-                        </div>
-
-                        <div>
-                            Player
-                        </div>
-
-                        <div>
-                            Elo
-                        </div>
-
-                        <div>
-                            Wins
-                        </div>
-
+                <div>
+                    <div class="eyebrow">
+                        GP Bikes Academy
                     </div>
 
+                    <h1>
+                        Ranked
+                    </h1>
 
-                    <!-- Players loaded from JSON -->
-
-                    <div id="players">
-
-                        <div class="error">
-                            Loading rankings...
-                        </div>
-
-                    </div>
-
-
+                    <p>
+                        2026 competitive standings
+                    </p>
                 </div>
 
             </div>
 
 
-        </div>
+            <!-- Season bar -->
 
+            <div class="season-bar">
+
+                <div>
+                    <i class="fa-solid fa-ranking-star"></i>
+                    2026 Ranked
+                </div>
+
+                <div id="player-count">
+                    Loading...
+                </div>
+
+            </div>
+
+
+            <!-- Leaderboard -->
+
+            <section class="leaderboard">
+
+                <!-- Table header -->
+
+                <div class="player headers">
+
+                    <div>
+                        #
+                    </div>
+
+                    <div>
+                        Player
+                    </div>
+
+                    <div>
+                        Elo
+                    </div>
+
+                    <div>
+                        Wins
+                    </div>
+
+                </div>
+
+
+                <!-- Players inserted here -->
+
+                <div id="players">
+
+                    <div class="loading">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        Loading rankings...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
 
     </main>
 
 
-    <!-- =====================================================
+    <!-- =========================
          JAVASCRIPT
-    ====================================================== -->
+    ========================== -->
 
     <script>
 
@@ -166,26 +164,29 @@
             const container =
                 document.getElementById("players");
 
+            const playerCount =
+                document.getElementById("player-count");
+
 
             try {
 
                 /*
-                 * Load the player database.
+                 * Load elo_db.json.
                  *
-                 * elo_db.json should be in the
-                 * same folder as this file.
+                 * It must be in the same folder
+                 * as ranked.html.
                  */
 
                 const response =
-                    await fetch("elo_db.json");
+                    await fetch("elo_db.json", {
+                        cache: "no-cache"
+                    });
 
 
                 if (!response.ok) {
-
                     throw new Error(
                         "Could not load elo_db.json"
                     );
-
                 }
 
 
@@ -204,21 +205,32 @@
 
                             name: name,
 
-                            elo: stats.elo ?? 0,
+                            elo: Number(stats.elo) || 0,
 
-                            wins: stats.wins
+                            wins:
+                                stats.wins !== undefined
+                                    ? Number(stats.wins) || 0
+                                    : 0
 
                         })
                     );
 
 
                 /*
-                 * Sort highest Elo first.
+                 * Highest Elo first.
                  */
 
                 players.sort(
                     (a, b) => b.elo - a.elo
                 );
+
+
+                /*
+                 * Display player count.
+                 */
+
+                playerCount.textContent =
+                    `${players.length} player${players.length === 1 ? "" : "s"}`;
 
 
                 /*
@@ -229,39 +241,63 @@
 
 
                 /*
-                 * Create each player row.
+                 * No players.
+                 */
+
+                if (players.length === 0) {
+
+                    container.innerHTML = `
+                        <div class="error">
+                            No players found.
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                /*
+                 * Create player rows.
                  */
 
                 players.forEach(
                     (player, index) => {
 
-
                         const row =
                             document.createElement("div");
 
 
-                        row.className =
-                            "player";
+                        row.className = "player";
 
 
                         /*
-                         * If the player has no wins
-                         * value in the JSON, display —.
+                         * Medal for top three.
                          */
 
-                        const wins =
-                            player.wins !== undefined
-                                ? player.wins
-                                : "—";
+                        let rankDisplay =
+                            `#${index + 1}`;
+
+                        if (index === 0) {
+                            rankDisplay = "🥇";
+                        }
+
+                        if (index === 1) {
+                            rankDisplay = "🥈";
+                        }
+
+                        if (index === 2) {
+                            rankDisplay = "🥉";
+                        }
 
 
                         row.innerHTML = `
 
                             <div class="rank">
-                                ${index + 1}
+                                ${rankDisplay}
                             </div>
 
                             <div class="name">
+                                <span class="player-status"></span>
                                 ${escapeHTML(player.name)}
                             </div>
 
@@ -270,7 +306,7 @@
                             </div>
 
                             <div class="wins">
-                                ${wins}
+                                ${player.wins}
                             </div>
 
                         `;
@@ -281,23 +317,6 @@
                     }
                 );
 
-
-                /*
-                 * Handle an empty database.
-                 */
-
-                if (players.length === 0) {
-
-                    container.innerHTML = `
-
-                        <div class="error">
-                            No players found.
-                        </div>
-
-                    `;
-
-                }
-
             }
 
 
@@ -306,17 +325,25 @@
                 console.error(error);
 
 
+                playerCount.textContent = "Error";
+
+
                 container.innerHTML = `
 
                     <div class="error">
 
-                        Could not load
-                        <strong>elo_db.json</strong>.
+                        <i class="fa-solid fa-triangle-exclamation"></i>
 
-                        <br>
+                        <strong>
+                            Could not load the rankings
+                        </strong>
 
-                        Make sure the JSON file is in
-                        the same folder as ranked.html.
+                        <span>
+                            Make sure
+                            <strong>elo_db.json</strong>
+                            is in the same folder as
+                            <strong>ranked.html</strong>.
+                        </span>
 
                     </div>
 
@@ -328,8 +355,8 @@
 
 
         /*
-         * Prevent player names from being
-         * interpreted as HTML.
+         * Protect the page from HTML
+         * inside player names.
          */
 
         function escapeHTML(text) {
@@ -337,9 +364,7 @@
             const div =
                 document.createElement("div");
 
-
             div.textContent = text;
-
 
             return div.innerHTML;
 
@@ -347,13 +372,12 @@
 
 
         /*
-         * Load rankings when the page starts.
+         * Load rankings.
          */
 
         loadPlayers();
 
     </script>
-
 
 </body>
 
