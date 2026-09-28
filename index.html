@@ -1,0 +1,385 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GP Bikes Academy Ranked</title>
+
+    <!-- Font Awesome icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         TOP BAR
+    ========================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            <i class="fa-solid fa-motorcycle"></i>
+            <span>GP Bikes Academy</span>
+        </div>
+
+        <div class="topbar-title">
+            Ranked
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <nav class="sidebar">
+
+        <a href="ranked.html" class="active">
+            <i class="fa-solid fa-trophy"></i>
+            <span class="label">Ranked</span>
+        </a>
+
+        <a
+            href="https://discord.gg/NGwKCQ96m8"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="discord-link"
+        >
+            <i class="fa-brands fa-discord"></i>
+            <span class="label">Join the Discord</span>
+        </a>
+
+    </nav>
+
+
+    <!-- =========================
+         MAIN PAGE
+    ========================== -->
+
+    <main class="page">
+
+        <div class="content">
+
+            <!-- Page heading -->
+
+            <div class="page-heading">
+
+                <div>
+                    <div class="eyebrow">
+                        GP Bikes Academy
+                    </div>
+
+                    <h1>
+                        Ranked
+                    </h1>
+
+                    <p>
+                        2026 competitive standings
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- Season bar -->
+
+            <div class="season-bar">
+
+                <div>
+                    <i class="fa-solid fa-ranking-star"></i>
+                    2026 Ranked
+                </div>
+
+                <div id="player-count">
+                    Loading...
+                </div>
+
+            </div>
+
+
+            <!-- Leaderboard -->
+
+            <section class="leaderboard">
+
+                <!-- Table header -->
+
+                <div class="player headers">
+
+                    <div>
+                        #
+                    </div>
+
+                    <div>
+                        Player
+                    </div>
+
+                    <div>
+                        Elo
+                    </div>
+
+                    <div>
+                        Wins
+                    </div>
+
+                </div>
+
+
+                <!-- Players inserted here -->
+
+                <div id="players">
+
+                    <div class="loading">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        Loading rankings...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        async function loadPlayers() {
+
+            const container =
+                document.getElementById("players");
+
+            const playerCount =
+                document.getElementById("player-count");
+
+
+            try {
+
+                /*
+                 * Load elo_db.json.
+                 *
+                 * It must be in the same folder
+                 * as ranked.html.
+                 */
+
+                const response =
+                    await fetch("elo_db.json", {
+                        cache: "no-cache"
+                    });
+
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Could not load elo_db.json"
+                    );
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                /*
+                 * Convert the JSON object into
+                 * an array of players.
+                 */
+
+                const players =
+                    Object.entries(data).map(
+                        ([name, stats]) => ({
+
+                            name: name,
+
+                            elo: Number(stats.elo) || 0,
+
+                            wins:
+                                stats.wins !== undefined
+                                    ? Number(stats.wins) || 0
+                                    : 0
+
+                        })
+                    );
+
+
+                /*
+                 * Highest Elo first.
+                 */
+
+                players.sort(
+                    (a, b) => b.elo - a.elo
+                );
+
+
+                /*
+                 * Display player count.
+                 */
+
+                playerCount.textContent =
+                    `${players.length} player${players.length === 1 ? "" : "s"}`;
+
+
+                /*
+                 * Clear loading message.
+                 */
+
+                container.innerHTML = "";
+
+
+                /*
+                 * No players.
+                 */
+
+                if (players.length === 0) {
+
+                    container.innerHTML = `
+                        <div class="error">
+                            No players found.
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                /*
+                 * Create player rows.
+                 */
+
+                players.forEach(
+                    (player, index) => {
+
+                        const row =
+                            document.createElement("div");
+
+
+                        row.className = "player";
+
+
+                        /*
+                         * Medal for top three.
+                         */
+
+                        let rankDisplay =
+                            `#${index + 1}`;
+
+                        if (index === 0) {
+                            rankDisplay = "🥇";
+                        }
+
+                        if (index === 1) {
+                            rankDisplay = "🥈";
+                        }
+
+                        if (index === 2) {
+                            rankDisplay = "🥉";
+                        }
+
+
+                        row.innerHTML = `
+
+                            <div class="rank">
+                                ${rankDisplay}
+                            </div>
+
+                            <div class="name">
+                                <span class="player-status"></span>
+                                ${escapeHTML(player.name)}
+                            </div>
+
+                            <div class="elo">
+                                ${player.elo}
+                            </div>
+
+                            <div class="wins">
+                                ${player.wins}
+                            </div>
+
+                        `;
+
+
+                        container.appendChild(row);
+
+                    }
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+
+                playerCount.textContent = "Error";
+
+
+                container.innerHTML = `
+
+                    <div class="error">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                        <strong>
+                            Could not load the rankings
+                        </strong>
+
+                        <span>
+                            Make sure
+                            <strong>elo_db.json</strong>
+                            is in the same folder as
+                            <strong>ranked.html</strong>.
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        /*
+         * Protect the page from HTML
+         * inside player names.
+         */
+
+        function escapeHTML(text) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent = text;
+
+            return div.innerHTML;
+
+        }
+
+
+        /*
+         * Load rankings.
+         */
+
+        loadPlayers();
+
+    </script>
+
+</body>
+
+</html>
+```
