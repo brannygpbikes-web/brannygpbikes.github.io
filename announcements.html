@@ -16,11 +16,8 @@
 
     <link rel="stylesheet" href="./style.css">
 
-    <style>
 
-        /* ==========================================
-           ANNOUNCEMENTS
-           ========================================== */
+    <style>
 
         .announcements-list {
             display: flex;
@@ -67,6 +64,7 @@
             color: #ffffff;
 
             font-size: 18px;
+
             font-weight: 700;
         }
 
@@ -82,6 +80,7 @@
 
         .announcement-type {
             display: inline-flex;
+
             align-items: center;
 
             margin-bottom: 12px;
@@ -99,6 +98,7 @@
                 rgba(192, 24, 31, 0.12);
 
             font-size: 10px;
+
             font-weight: 700;
 
             letter-spacing: 0.5px;
@@ -126,21 +126,17 @@
                 padding: 17px 14px;
             }
 
-
             .announcement-top {
                 flex-direction: column;
+
                 align-items: flex-start;
 
                 gap: 6px;
-
-                margin-bottom: 10px;
             }
-
 
             .announcement-title {
                 font-size: 15px;
             }
-
 
             .announcement-message {
                 font-size: 13px;
@@ -156,412 +152,322 @@
 <body>
 
 
-    <!-- ==========================================
-         TOP BAR
-         ========================================== -->
+<header class="topbar">
 
-    <header class="topbar">
+    <div class="brand">
 
-        <div class="brand">
+        <i class="fa-solid fa-flag-checkered"></i>
 
-            <i class="fa-solid fa-flag-checkered"></i>
+        <span>
+            GP Bikes Academy Ranked
+        </span>
 
-            <span>
-                GP Bikes Academy Ranked
-            </span>
+    </div>
+
+</header>
+
+
+<nav class="sidebar">
+
+    <a href="./index.html">
+
+        <i class="fa-solid fa-trophy"></i>
+
+        <span>Ranked</span>
+
+    </a>
+
+
+    <a href="./announcements.html"
+       class="active">
+
+        <i class="fa-solid fa-bullhorn"></i>
+
+        <span>Announcements</span>
+
+    </a>
+
+
+    <a href="./downloads.html">
+
+        <i class="fa-solid fa-download"></i>
+
+        <span>Downloads</span>
+
+    </a>
+
+
+    <div class="sidebar-divider"></div>
+
+
+    <a href="https://discord.gg/NGwKCQ96m8"
+       target="_blank"
+       rel="noopener noreferrer">
+
+        <i class="fa-brands fa-discord"></i>
+
+        <span>
+            Join the Discord
+        </span>
+
+    </a>
+
+</nav>
+
+
+<main class="page">
+
+    <div class="page-content">
+
+
+        <div class="page-title">
+
+            <div>
+
+                <h1>
+                    Announcements
+                </h1>
+
+                <p>
+                    News and updates from GP Bikes Academy
+                </p>
+
+            </div>
 
         </div>
 
-    </header>
+
+        <section class="panel">
 
 
-
-    <!-- ==========================================
-         SIDEBAR
-         ========================================== -->
-
-    <nav class="sidebar">
-
-
-        <a href="./index.html">
-
-            <i class="fa-solid fa-trophy"></i>
-
-            <span>
-                Ranked
-            </span>
-
-        </a>
-
-
-        <a href="./announcements.html"
-           class="active">
-
-            <i class="fa-solid fa-bullhorn"></i>
-
-            <span>
-                Announcements
-            </span>
-
-        </a>
-
-
-        <a href="./downloads.html">
-
-            <i class="fa-solid fa-download"></i>
-
-            <span>
-                Downloads
-            </span>
-
-        </a>
-
-
-        <div class="sidebar-divider"></div>
-
-
-        <a href="https://discord.gg/NGwKCQ96m8"
-           target="_blank"
-           rel="noopener noreferrer">
-
-            <i class="fa-brands fa-discord"></i>
-
-            <span>
-                Join the Discord
-            </span>
-
-        </a>
-
-
-    </nav>
-
-
-
-    <!-- ==========================================
-         PAGE
-         ========================================== -->
-
-    <main class="page">
-
-        <div class="page-content">
-
-
-            <!-- PAGE TITLE -->
-
-            <div class="page-title">
+            <div class="panel-title">
 
                 <div>
 
-                    <h1>
-                        Announcements
-                    </h1>
+                    <i class="fa-solid fa-bullhorn"></i>
 
-                    <p>
-                        News and updates from GP Bikes Academy
-                    </p>
+                    Latest Announcements
 
                 </div>
 
             </div>
 
 
+            <div id="announcements"
+                 class="announcements-list">
 
-            <!-- ANNOUNCEMENTS PANEL -->
+                <div class="status-message">
 
-            <section class="panel">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
 
-
-                <div class="panel-title">
-
-                    <div>
-
-                        <i class="fa-solid fa-bullhorn"></i>
-
-                        Latest Announcements
-
-                    </div>
+                    Loading announcements...
 
                 </div>
 
+            </div>
 
 
-                <div id="announcements"
-                     class="announcements-list">
+        </section>
 
 
-                    <div class="status-message">
+    </div>
 
-                        <i class="fa-solid fa-spinner fa-spin"></i>
+</main>
 
-                        Loading announcements...
 
-                    </div>
+<script>
 
+const ANNOUNCEMENTS_URL =
+    "https://raw.githubusercontent.com/brannygpbikes-web/brannygpbikes.github.io/refs/heads/main/announcements.json";
+
+
+async function loadAnnouncements() {
+
+    const container =
+        document.getElementById(
+            "announcements"
+        );
+
+
+    try {
+
+        const response = await fetch(
+
+            ANNOUNCEMENTS_URL +
+            "?v=" +
+            Date.now(),
+
+            {
+                cache: "no-store"
+            }
+
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Announcements returned HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !data.announcements ||
+            data.announcements.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="status-message">
+
+                    No announcements yet.
 
                 </div>
 
+            `;
 
-            </section>
+            return;
 
-
-        </div>
-
-    </main>
+        }
 
 
-
-    <!-- ==========================================
-         JAVASCRIPT
-         ========================================== -->
-
-    <script>
+        data.announcements.forEach(
+            announcement => {
 
 
-        async function loadAnnouncements() {
-
-
-            const container =
-                document.getElementById("announcements");
-
-
-            try {
-
-
-                /*
-                    Load announcements.json
-                */
-
-                const response = await fetch(
-
-                    "./announcements.json?v=" + Date.now(),
-
-                    {
-                        cache: "no-store"
-                    }
-
-                );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "announcements.json returned HTTP " +
-                        response.status
+                const article =
+                    document.createElement(
+                        "article"
                     );
 
-                }
+
+                article.className =
+                    "announcement";
 
 
-                const data =
-                    await response.json();
+                const type =
+                    announcement.type
 
+                        ? `
 
+                            <div class="announcement-type">
 
-                /*
-                    Remove loading message
-                */
-
-                container.innerHTML = "";
-
-
-
-                /*
-                    No announcements
-                */
-
-                if (
-                    !data.announcements ||
-                    data.announcements.length === 0
-                ) {
-
-
-                    container.innerHTML = `
-
-                        <div class="status-message">
-
-                            No announcements yet.
-
-                        </div>
-
-                    `;
-
-
-                    return;
-
-                }
-
-
-
-                /*
-                    Create each announcement
-                */
-
-                data.announcements.forEach(
-
-                    announcement => {
-
-
-                        const article =
-                            document.createElement("article");
-
-
-                        article.className =
-                            "announcement";
-
-
-                        article.innerHTML = `
-
-
-                            <div class="announcement-top">
-
-
-                                <h2 class="announcement-title">
-
-                                    ${escapeHTML(
-                                        announcement.title
-                                    )}
-
-                                </h2>
-
-
-                                <div class="announcement-date">
-
-                                    ${escapeHTML(
-                                        announcement.date || ""
-                                    )}
-
-                                </div>
-
+                                ${escapeHTML(
+                                    announcement.type
+                                )}
 
                             </div>
 
+                          `
+
+                        : "";
 
 
-                            ${
-                                announcement.type
+                article.innerHTML = `
 
-                                ?
+                    <div class="announcement-top">
 
-                                `
+                        <h2 class="announcement-title">
 
-                                <div class="announcement-type">
+                            ${escapeHTML(
+                                announcement.title
+                            )}
 
-                                    ${escapeHTML(
-                                        announcement.type
-                                    )}
-
-                                </div>
-
-                                `
-
-                                :
-
-                                ""
-                            }
+                        </h2>
 
 
+                        <div class="announcement-date">
 
-                            <p class="announcement-message">
+                            ${escapeHTML(
+                                announcement.date || ""
+                            )}
 
-                                ${escapeHTML(
-                                    announcement.message || ""
-                                )}
-
-                            </p>
-
-
-                        `;
-
-
-                        container.appendChild(
-                            article
-                        );
-
-
-                    }
-
-                );
-
-
-            }
-
-
-            catch (error) {
-
-
-                console.error(
-                    "Announcements error:",
-                    error
-                );
-
-
-                container.innerHTML = `
-
-
-                    <div class="status-message error-message">
-
-
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-
-
-                        <strong>
-
-                            Announcements could not be loaded.
-
-                        </strong>
-
-
-                        <small>
-
-                            The website could not read announcements.json.
-
-                        </small>
-
+                        </div>
 
                     </div>
 
+
+                    ${type}
+
+
+                    <p class="announcement-message">
+
+                        ${escapeHTML(
+                            announcement.message || ""
+                        )}
+
+                    </p>
 
                 `;
 
 
+                container.appendChild(
+                    article
+                );
+
             }
+        );
+
+    }
 
 
-        }
+    catch (error) {
+
+        console.error(
+            "Announcements error:",
+            error
+        );
 
 
+        container.innerHTML = `
 
-        /*
-            Prevent announcement text from
-            being treated as HTML.
-        */
+            <div class="status-message error-message">
 
-        function escapeHTML(value) {
+                <i class="fa-solid fa-triangle-exclamation"></i>
 
+                <strong>
+                    Announcements could not be loaded.
+                </strong>
 
-            const element =
-                document.createElement("div");
+                <small>
+                    The announcements database could not be reached.
+                </small>
 
+            </div>
 
-            element.textContent =
-                String(value ?? "");
+        `;
 
+    }
 
-            return element.innerHTML;
-
-
-        }
-
-
-
-        /*
-            Load announcements
-        */
-
-        loadAnnouncements();
+}
 
 
-    </script>
+function escapeHTML(value) {
+
+    const element =
+        document.createElement("div");
+
+    element.textContent =
+        String(value ?? "");
+
+    return element.innerHTML;
+
+}
+
+
+loadAnnouncements();
+
+</script>
 
 
 </body>
