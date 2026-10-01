@@ -1,40 +1,177 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GP Bikes Academy Ranked | Home</title>
-    
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <title>GP Bikes Academy Ranked</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="home">
 
-  <header class="topbar">
-    <div class="brand">GP Bikes Academy Ranked</div>
-  </header>
 
-  <nav class="sidebar">
-    <a href="index.html" class="active"><i class="fas fa-house"></i><span class="label">Home</span></a>
-    <a href="ranked.html"><i class="fas fa-trophy"></i><span class="label">Ranked</span></a>
-    <a href="https://discord.gg/YOUR-INVITE-CODE" target="_blank" rel="noopener noreferrer">
-      <i class="fab fa-discord"></i><span class="label">Discord</span>
-    </a>
-  </nav>
+<body>
 
-  <main class="page">
-    <div class="hero">
-      <h1>GP Bikes Academy Ranked</h1>
-      <p>Race. Win. Climb the leaderboard.</p>
-      <div class="buttons">
-        <a class="btn primary" href="ranked.html"><i class="fas fa-trophy"></i> View Rankings</a>
-        <a class="btn discord" href="https://discord.gg/YOUR-INVITE-CODE" target="_blank" rel="noopener noreferrer">
-          <i class="fab fa-discord"></i> Join the Discord
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            GP Bikes Academy Ranked
+        </div>
+
+    </header>
+
+
+    <!-- SIDEBAR -->
+
+    <nav class="sidebar">
+
+        <a href="index.html" class="active">
+
+            <i class="fas fa-trophy"></i>
+
+            <span class="label">
+                Ranked
+            </span>
+
         </a>
-      </div>
-    </div>
-  </main>
 
-</body>
-</html>
+
+        <a href="downloads.html">
+
+            <i class="fas fa-download"></i>
+
+            <span class="label">
+                Downloads
+            </span>
+
+        </a>
+
+
+        <a
+            href="https://discord.gg/NGwKCQ96m8"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="discord-link"
+        >
+
+            <i class="fab fa-discord"></i>
+
+            <span class="label">
+                Join the Discord
+            </span>
+
+        </a>
+
+    </nav>
+
+
+    <!-- PAGE -->
+
+    <main class="page">
+
+        <div class="content">
+
+
+            <div class="season-bar">
+                2026 Ranked
+            </div>
+
+
+            <div class="leaderboard">
+
+                <!-- HEADERS -->
+
+                <div class="player headers">
+
+                    <div>N°</div>
+
+                    <div>Player</div>
+
+                    <div>Elo</div>
+
+                    <div>Wins</div>
+
+                </div>
+
+
+                <!-- PLAYERS ARE AUTOMATICALLY ADDED HERE -->
+
+                <div id="players">
+
+                    <div class="message">
+                        Loading rankings...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        async function loadPlayers() {
+
+            const container =
+                document.getElementById("players");
+
+
+            try {
+
+                const response =
+                    await fetch("elo_db.json");
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Could not load elo_db.json"
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                const players =
+                    Object.entries(data).map(
+                        ([name, stats]) => ({
+
+                            name: name,
+
+                            elo:
+                                Number(stats.elo) || 0,
+
+                            wins:
+                                stats.wins !== undefined
+                                    ? Number(stats.wins) || 0
+                                    : 0
+
+                        })
+                    );
+
+
+                /*
+                    Highest Elo first
+                */
+
+                players.sort(
+                    (a, b) => b.elo - a.elo
+                );
+
+
+                container.inner
