@@ -35,6 +35,21 @@
                     "name": "WSSP 24",
                     "description": "GP Bikes bike download.",
                     "link": "https://gpb-mods.com/wssp-2024-v0-1/"
+                },
+                {
+                    "name": "GP500",
+                    "description": "GP Bikes bike download.",
+                    "link": "https://gpb-mods.com/gp500-v1-5/"
+                },
+                {
+                    "name": "Yamaha YZF R1M 2021",
+                    "description": "GP Bikes bike download.",
+                    "link": "https://gpb-mods.com/racing-modified-1000cc-yamaha-yzf-r1m-2021/" 
+                },
+                {
+                    "name": "Yamaha YZF R1M 2021",
+                    "description": "GP Bikes bike download.",
+                    "link": "https://gpb-mods.com/motogp-historical-mod-v1-0/"
                 }
             ]
         }
