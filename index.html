@@ -1,7 +1,6 @@
 ```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,117 +10,256 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 
-<header class="topbar">
-    <div class="brand">
-        GP Bikes Academy Ranked
-    </div>
-</header>
-
-
-<nav class="sidebar">
-
-    <a href="index.html" class="active">
-        <i class="fas fa-trophy"></i>
-        <span class="label">Ranked</span>
-    </a>
-
-    <a href="downloads.html">
-        <i class="fas fa-download"></i>
-        <span class="label">Downloads</span>
-    </a>
-
-    <a href="https://discord.gg/NGwKCQ96m8"
-       target="_blank"
-       rel="noopener noreferrer"
-       class="discord-link">
-
-        <i class="fab fa-discord"></i>
-        <span class="label">Join the Discord</span>
-
-    </a>
-
-</nav>
-
-
-<main class="page">
-
-    <div class="content">
-
-        <div class="season-bar">
-            2026 Ranked
+    <!-- TOP BAR -->
+    <header class="topbar">
+        <div class="brand">
+            <i class="fa-solid fa-flag-checkered"></i>
+            <span>GP Bikes Academy Ranked</span>
         </div>
+    </header>
 
 
-        <div class="leaderboard">
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
 
-            <div class="player headers">
-                <div>N°</div>
-                <div>Player</div>
-                <div>Elo</div>
-                <div>Wins</div>
-            </div>
+        <a href="./index.html" class="active">
+            <i class="fa-solid fa-trophy"></i>
+            <span>Ranked</span>
+        </a>
+
+        <a href="./downloads.html">
+            <i class="fa-solid fa-download"></i>
+            <span>Downloads</span>
+        </a>
+
+        <div class="sidebar-divider"></div>
+
+        <a href="https://discord.gg/NGwKCQ96m8"
+           target="_blank"
+           rel="noopener noreferrer">
+
+            <i class="fa-brands fa-discord"></i>
+            <span>Join the Discord</span>
+        </a>
+
+    </nav>
 
 
-            <div id="players">
+    <!-- MAIN PAGE -->
+    <main class="page">
 
-                <div class="message">
-                    Loading rankings...
+        <div class="page-content">
+
+            <!-- PAGE TITLE -->
+            <div class="page-title">
+
+                <div>
+                    <h1>Ranked</h1>
+                    <p>GP Bikes Academy competitive standings</p>
+                </div>
+
+                <div class="season-badge">
+                    <span class="live-dot"></span>
+                    2026 Season
                 </div>
 
             </div>
 
+
+            <!-- LEADERBOARD -->
+            <section class="panel">
+
+                <div class="panel-title">
+                    <div>
+                        <i class="fa-solid fa-ranking-star"></i>
+                        Leaderboard
+                    </div>
+
+                    <span>Sorted by Elo</span>
+                </div>
+
+
+                <div class="leaderboard">
+
+                    <div class="player leaderboard-header">
+                        <div>Rank</div>
+                        <div>Player</div>
+                        <div>Elo</div>
+                        <div>Wins</div>
+                    </div>
+
+
+                    <div id="players">
+
+                        <div class="status-message">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            Loading rankings...
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
         </div>
 
-    </div>
-
-</main>
+    </main>
 
 
-<script>
+    <script>
 
-const ELO_URL =
-    "https://raw.githubusercontent.com/brannygpbikes-web/brannygpbikes.github.io/refs/heads/main/elo_db.json";
+        async function loadPlayers() {
+
+            const container = document.getElementById("players");
+
+            try {
+
+                const response = await fetch(
+                    "./elo_db.json?v=" + Date.now(),
+                    {
+                        cache: "no-store"
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "elo_db.json returned HTTP " + response.status
+                    );
+                }
+
+                const data = await response.json();
+
+                const players = Object.entries(data).map(
+                    ([name, stats]) => ({
+                        name: name,
+                        elo: Number(stats.elo) || 0,
+                        wins: Number(stats.wins) || 0
+                    })
+                );
+
+                players.sort((a, b) => {
+
+                    if (b.elo !== a.elo) {
+                        return b.elo - a.elo;
+                    }
+
+                    return b.wins - a.wins;
+
+                });
 
 
-async function loadPlayers() {
-
-    const container =
-        document.getElementById("players");
+                container.innerHTML = "";
 
 
-    try {
+                if (players.length === 0) {
 
-        /*
-            The timestamp prevents the browser
-            from showing an old cached ranking.
-        */
+                    container.innerHTML = `
+                        <div class="status-message">
+                            No ranked players yet.
+                        </div>
+                    `;
 
-        const response = await fetch(
-            ELO_URL + "?t=" + Date.now(),
-            {
-                cache: "no-store"
+                    return;
+                }
+
+
+                players.forEach((player, index) => {
+
+                    const row = document.createElement("div");
+
+                    row.className = "player";
+
+
+                    let rankDisplay = index + 1;
+                    let rankClass = "";
+
+                    if (index === 0) {
+                        rankDisplay = "1";
+                        rankClass = "rank-gold";
+                    }
+
+                    if (index === 1) {
+                        rankDisplay = "2";
+                        rankClass = "rank-silver";
+                    }
+
+                    if (index === 2) {
+                        rankDisplay = "3";
+                        rankClass = "rank-bronze";
+                    }
+
+
+                    row.innerHTML = `
+
+                        <div class="rank ${rankClass}">
+                            ${rankDisplay}
+                        </div>
+
+                        <div class="player-name">
+                            ${escapeHTML(player.name)}
+                        </div>
+
+                        <div class="elo">
+                            ${player.elo}
+                        </div>
+
+                        <div class="wins">
+                            ${player.wins}
+                        </div>
+
+                    `;
+
+                    container.appendChild(row);
+
+                });
+
+
+            } catch (error) {
+
+                console.error("Leaderboard error:", error);
+
+                container.innerHTML = `
+
+                    <div class="status-message error-message">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                        <strong>Rankings could not be loaded.</strong>
+
+                        <small>
+                            The website could not read elo_db.json.
+                        </small>
+
+                    </div>
+
+                `;
+
             }
-        );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Could not load elo database."
-            );
 
         }
 
 
-        const data =
-            await response.json();
+        function escapeHTML(value) {
+
+            const element = document.createElement("div");
+
+            element.textContent = String(value);
+
+            return element.innerHTML;
+
+        }
 
 
-        const players =
-            Object.entries(data).map(
-                ([name, stats]) => ({
+        loadPlayers();
+
+    </script>
+
+</body>
+</html>
+```
