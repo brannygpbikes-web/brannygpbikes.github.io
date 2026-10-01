@@ -5,9 +5,9 @@
             "icon": "fa-solid fa-road",
             "downloads": [
                 {
-                    "name": "Example Track",
-                    "description": "GP Bikes track download.",
-                    "link": "https://example.com"
+                    "name": "Sprint Race Tracks",
+                    "description": "All the tracks that will be used in the Academy sprint races.",
+                    "link": "https://mega.nz/folder/sjoUALjJ#dMYr3rDkYb-PgO_uPuADMw"
                 }
             ]
         },
@@ -16,9 +16,24 @@
             "icon": "fa-solid fa-motorcycle",
             "downloads": [
                 {
-                    "name": "Example Bike",
+                    "name": "Moto3 - 2026",
                     "description": "GP Bikes bike download.",
-                    "link": "https://example.com"
+                    "link": "https://gpb-mods.com/moto-3-2026-v0-1/"
+                }
+                {
+                    "name": "WSBK 24",
+                    "description": "GP Bikes bike download.",
+                    "link": "https://gpb-mods.com/sbk-24/"
+                }
+                {
+                    "name": "Moto2 - 2026",
+                    "description": "GP Bikes bike download.",
+                    "link": "https://gpb-mods.com/moto2-2026/"
+                }
+                {
+                    "name": "WSSP 24",
+                    "description": "GP Bikes bike download.",
+                    "link": "https://gpb-mods.com/wssp-2024-v0-1/"
                 }
             ]
         }
