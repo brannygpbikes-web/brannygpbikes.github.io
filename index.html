@@ -8,170 +8,120 @@
 
     <title>GP Bikes Academy Ranked</title>
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    >
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
-
 <body>
 
-    <!-- TOP BAR -->
+<header class="topbar">
+    <div class="brand">
+        GP Bikes Academy Ranked
+    </div>
+</header>
 
-    <header class="topbar">
 
-        <div class="brand">
-            GP Bikes Academy Ranked
+<nav class="sidebar">
+
+    <a href="index.html" class="active">
+        <i class="fas fa-trophy"></i>
+        <span class="label">Ranked</span>
+    </a>
+
+    <a href="downloads.html">
+        <i class="fas fa-download"></i>
+        <span class="label">Downloads</span>
+    </a>
+
+    <a href="https://discord.gg/NGwKCQ96m8"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="discord-link">
+
+        <i class="fab fa-discord"></i>
+        <span class="label">Join the Discord</span>
+
+    </a>
+
+</nav>
+
+
+<main class="page">
+
+    <div class="content">
+
+        <div class="season-bar">
+            2026 Ranked
         </div>
 
-    </header>
 
+        <div class="leaderboard">
 
-    <!-- SIDEBAR -->
-
-    <nav class="sidebar">
-
-        <a href="index.html" class="active">
-
-            <i class="fas fa-trophy"></i>
-
-            <span class="label">
-                Ranked
-            </span>
-
-        </a>
-
-
-        <a href="downloads.html">
-
-            <i class="fas fa-download"></i>
-
-            <span class="label">
-                Downloads
-            </span>
-
-        </a>
-
-
-        <a
-            href="https://discord.gg/NGwKCQ96m8"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="discord-link"
-        >
-
-            <i class="fab fa-discord"></i>
-
-            <span class="label">
-                Join the Discord
-            </span>
-
-        </a>
-
-    </nav>
-
-
-    <!-- PAGE -->
-
-    <main class="page">
-
-        <div class="content">
-
-
-            <div class="season-bar">
-                2026 Ranked
+            <div class="player headers">
+                <div>N°</div>
+                <div>Player</div>
+                <div>Elo</div>
+                <div>Wins</div>
             </div>
 
 
-            <div class="leaderboard">
+            <div id="players">
 
-                <!-- HEADERS -->
-
-                <div class="player headers">
-
-                    <div>N°</div>
-
-                    <div>Player</div>
-
-                    <div>Elo</div>
-
-                    <div>Wins</div>
-
-                </div>
-
-
-                <!-- PLAYERS ARE AUTOMATICALLY ADDED HERE -->
-
-                <div id="players">
-
-                    <div class="message">
-                        Loading rankings...
-                    </div>
-
+                <div class="message">
+                    Loading rankings...
                 </div>
 
             </div>
 
         </div>
 
-    </main>
+    </div>
+
+</main>
 
 
-    <script>
+<script>
 
-        async function loadPlayers() {
-
-            const container =
-                document.getElementById("players");
+const ELO_URL =
+    "https://raw.githubusercontent.com/brannygpbikes-web/brannygpbikes.github.io/refs/heads/main/elo_db.json";
 
 
-            try {
+async function loadPlayers() {
 
-                const response =
-                    await fetch("elo_db.json");
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Could not load elo_db.json"
-                    );
-
-                }
+    const container =
+        document.getElementById("players");
 
 
-                const data =
-                    await response.json();
+    try {
+
+        /*
+            The timestamp prevents the browser
+            from showing an old cached ranking.
+        */
+
+        const response = await fetch(
+            ELO_URL + "?t=" + Date.now(),
+            {
+                cache: "no-store"
+            }
+        );
 
 
-                const players =
-                    Object.entries(data).map(
-                        ([name, stats]) => ({
+        if (!response.ok) {
 
-                            name: name,
+            throw new Error(
+                "Could not load elo database."
+            );
 
-                            elo:
-                                Number(stats.elo) || 0,
-
-                            wins:
-                                stats.wins !== undefined
-                                    ? Number(stats.wins) || 0
-                                    : 0
-
-                        })
-                    );
+        }
 
 
-                /*
-                    Highest Elo first
-                */
-
-                players.sort(
-                    (a, b) => b.elo - a.elo
-                );
+        const data =
+            await response.json();
 
 
-                container.inner
+        const players =
+            Object.entries(data).map(
+                ([name, stats]) => ({
