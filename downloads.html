@@ -1,0 +1,411 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Downloads - GP Bikes Academy Ranked</title>
+
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            GP Bikes Academy Ranked
+        </div>
+
+    </header>
+
+
+
+    <!-- SIDEBAR -->
+
+    <nav class="sidebar">
+
+
+        <a href="index.html">
+
+            <i class="fas fa-trophy"></i>
+
+            <span class="label">
+                Ranked
+            </span>
+
+        </a>
+
+
+
+        <a
+            href="downloads.html"
+            class="active"
+        >
+
+            <i class="fas fa-download"></i>
+
+            <span class="label">
+                Downloads
+            </span>
+
+        </a>
+
+
+
+        <a
+            href="https://discord.gg/NGwKCQ96m8"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="discord-link"
+        >
+
+            <i class="fab fa-discord"></i>
+
+            <span class="label">
+                Join the Discord
+            </span>
+
+        </a>
+
+
+    </nav>
+
+
+
+    <!-- PAGE -->
+
+    <main class="page">
+
+        <div class="content">
+
+
+            <div class="season-bar">
+                Downloads
+            </div>
+
+
+
+            <!-- DOWNLOADS GET PUT HERE AUTOMATICALLY -->
+
+            <div
+                id="downloads"
+                class="downloads"
+            >
+
+                <div class="message">
+                    Loading downloads...
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+
+    <script>
+
+
+        async function loadDownloads() {
+
+
+            const container =
+                document.getElementById("downloads");
+
+
+            try {
+
+
+                /*
+                    LOAD downloads.json
+                */
+
+                const response =
+                    await fetch("downloads.json");
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Could not load downloads.json"
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+
+                container.innerHTML = "";
+
+
+
+                /*
+                    CREATE EACH CATEGORY
+                */
+
+                data.categories.forEach(category => {
+
+
+                    /*
+                        CATEGORY TITLE
+                    */
+
+                    const title =
+                        document.createElement("div");
+
+
+                    title.className =
+                        "download-category";
+
+
+                    title.innerHTML = `
+
+                        <i class="${escapeHTML(category.icon)}"></i>
+
+                        <span>
+                            ${escapeHTML(category.name)}
+                        </span>
+
+                    `;
+
+
+                    container.appendChild(title);
+
+
+
+                    /*
+                        CATEGORY DOWNLOAD LIST
+                    */
+
+                    const list =
+                        document.createElement("div");
+
+
+                    list.className =
+                        "downloads-list";
+
+
+
+                    /*
+                        CREATE EACH DOWNLOAD
+                    */
+
+                    category.downloads.forEach(item => {
+
+
+                        const download =
+                            document.createElement("div");
+
+
+                        download.className =
+                            "download-item";
+
+
+                        download.innerHTML = `
+
+
+                            <div class="download-icon">
+
+                                <i class="${escapeHTML(category.icon)}"></i>
+
+                            </div>
+
+
+
+                            <div class="download-info">
+
+
+                                <div class="download-name">
+
+                                    ${escapeHTML(item.name)}
+
+                                </div>
+
+
+                                <div class="download-description">
+
+                                    ${escapeHTML(item.description || "")}
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <a
+                                class="download-button"
+                                href="${escapeAttribute(item.link)}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+
+                                <i class="fas fa-download"></i>
+
+                                <span>
+                                    Download
+                                </span>
+
+                            </a>
+
+
+                        `;
+
+
+                        list.appendChild(download);
+
+
+                    });
+
+
+
+                    /*
+                        CATEGORY HAS NOTHING IN IT
+                    */
+
+                    if (category.downloads.length === 0) {
+
+
+                        list.innerHTML = `
+
+                            <div class="message">
+
+                                Nothing here yet.
+
+                            </div>
+
+                        `;
+
+
+                    }
+
+
+
+                    container.appendChild(list);
+
+
+                });
+
+
+
+                /*
+                    NO CATEGORIES
+                */
+
+                if (data.categories.length === 0) {
+
+
+                    container.innerHTML = `
+
+                        <div class="message">
+
+                            No downloads yet.
+
+                        </div>
+
+                    `;
+
+
+                }
+
+
+            }
+
+
+            catch (error) {
+
+
+                console.error(error);
+
+
+                container.innerHTML = `
+
+                    <div class="error">
+
+                        Could not load the downloads.
+
+                        <br><br>
+
+                        Make sure downloads.json
+                        is uploaded to GitHub.
+
+                    </div>
+
+                `;
+
+
+            }
+
+
+        }
+
+
+
+        function escapeHTML(text) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent =
+                String(text);
+
+            return div.innerHTML;
+
+        }
+
+
+
+        function escapeAttribute(text) {
+
+            return String(text)
+
+                .replaceAll("&", "&amp;")
+
+                .replaceAll('"', "&quot;")
+
+                .replaceAll("<", "&lt;")
+
+                .replaceAll(">", "&gt;");
+
+        }
+
+
+
+        loadDownloads();
+
+
+    </script>
+
+
+</body>
+
+</html>
+```
