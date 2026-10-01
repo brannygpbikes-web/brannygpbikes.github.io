@@ -3,7 +3,7 @@
     "categories": [
         {
             "name": "Tracks",
-            "icon": "fas fa-road",
+            "icon": "fa-solid fa-road",
             "downloads": [
                 {
                     "name": "Example Track",
@@ -14,7 +14,7 @@
         },
         {
             "name": "Bikes",
-            "icon": "fas fa-motorcycle",
+            "icon": "fa-solid fa-motorcycle",
             "downloads": [
                 {
                     "name": "Example Bike",
