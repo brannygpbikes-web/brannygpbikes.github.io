@@ -1,7 +1,6 @@
 ```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="UTF-8">
@@ -9,364 +8,418 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Downloads - GP Bikes Academy Ranked</title>
+    <title>Downloads | GP Bikes Academy Ranked</title>
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 
 </head>
 
-
 <body>
 
+    <!-- TOP BAR -->
+    <header class="topbar">
 
-<header class="topbar">
+        <div class="brand">
 
-    <div class="brand">
-        GP Bikes Academy Ranked
-    </div>
+            <i class="fa-solid fa-flag-checkered"></i>
 
-</header>
-
-
-<nav class="sidebar">
-
-    <a href="index.html">
-
-        <i class="fas fa-trophy"></i>
-
-        <span class="label">
-            Ranked
-        </span>
-
-    </a>
-
-
-    <a href="downloads.html"
-       class="active">
-
-        <i class="fas fa-download"></i>
-
-        <span class="label">
-            Downloads
-        </span>
-
-    </a>
-
-
-    <a href="https://discord.gg/NGwKCQ96m8"
-       target="_blank"
-       rel="noopener noreferrer"
-       class="discord-link">
-
-        <i class="fab fa-discord"></i>
-
-        <span class="label">
-            Join the Discord
-        </span>
-
-    </a>
-
-</nav>
-
-
-<main class="page">
-
-    <div class="content">
-
-        <div class="season-bar">
-            Downloads
-        </div>
-
-
-        <div id="downloads"
-             class="downloads">
-
-            <div class="message">
-                Loading downloads...
-            </div>
+            <span>
+                GP Bikes Academy Ranked
+            </span>
 
         </div>
 
-    </div>
-
-</main>
+    </header>
 
 
-<script>
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
 
-const DOWNLOADS_URL =
-    "https://raw.githubusercontent.com/brannygpbikes-web/brannygpbikes.github.io/refs/heads/main/downloads.json";
+        <a href="./index.html">
 
+            <i class="fa-solid fa-trophy"></i>
 
-async function loadDownloads() {
+            <span>
+                Ranked
+            </span>
 
-    const container =
-        document.getElementById("downloads");
-
-
-    try {
-
-        /*
-            Load downloads directly from GitHub.
-
-            Timestamp prevents old cached versions
-            from being displayed.
-        */
-
-        const response = await fetch(
-            DOWNLOADS_URL + "?t=" + Date.now(),
-            {
-                cache: "no-store"
-            }
-        );
+        </a>
 
 
-        if (!response.ok) {
+        <a href="./downloads.html"
+           class="active">
 
-            throw new Error(
-                "Could not load downloads."
-            );
+            <i class="fa-solid fa-download"></i>
 
-        }
+            <span>
+                Downloads
+            </span>
 
-
-        const data =
-            await response.json();
-
-
-        container.innerHTML = "";
+        </a>
 
 
-        if (
-            !data.categories ||
-            data.categories.length === 0
-        ) {
+        <div class="sidebar-divider"></div>
 
-            container.innerHTML = `
 
-                <div class="message">
-                    No downloads yet.
+        <a href="https://discord.gg/NGwKCQ96m8"
+           target="_blank"
+           rel="noopener noreferrer">
+
+            <i class="fa-brands fa-discord"></i>
+
+            <span>
+                Join the Discord
+            </span>
+
+        </a>
+
+    </nav>
+
+
+    <!-- MAIN PAGE -->
+    <main class="page">
+
+        <div class="page-content">
+
+
+            <!-- PAGE TITLE -->
+            <div class="page-title">
+
+                <div>
+
+                    <h1>
+                        Downloads
+                    </h1>
+
+                    <p>
+                        GP Bikes Academy files and resources
+                    </p>
+
                 </div>
 
-            `;
-
-            return;
-
-        }
+            </div>
 
 
-        data.categories.forEach(
-            category => {
+            <!-- DOWNLOADS -->
+            <section class="panel">
+
+                <div class="panel-title">
+
+                    <div>
+
+                        <i class="fa-solid fa-box-open"></i>
+
+                        Available Downloads
+
+                    </div>
+
+                </div>
 
 
-                /*
-                    CATEGORY TITLE
-                */
+                <div id="downloads">
 
-                const categoryTitle =
-                    document.createElement("div");
+                    <div class="status-message">
 
+                        <i class="fa-solid fa-spinner fa-spin"></i>
 
-                categoryTitle.className =
-                    "download-category";
+                        Loading downloads...
 
+                    </div>
 
-                categoryTitle.innerHTML = `
+                </div>
 
-                    <i class="${escapeHTML(category.icon || "fas fa-download")}"></i>
-
-                    <span>
-                        ${escapeHTML(category.name)}
-                    </span>
-
-                `;
+            </section>
 
 
-                container.appendChild(
-                    categoryTitle
+        </div>
+
+    </main>
+
+
+    <script>
+
+        async function loadDownloads() {
+
+            const container =
+                document.getElementById("downloads");
+
+
+            try {
+
+                const response = await fetch(
+                    "./downloads.json?v=" + Date.now(),
+                    {
+                        cache: "no-store"
+                    }
                 );
 
 
+                if (!response.ok) {
 
-                /*
-                    DOWNLOAD LIST
-                */
+                    throw new Error(
+                        "downloads.json returned HTTP " +
+                        response.status
+                    );
 
-                const list =
-                    document.createElement("div");
-
-
-                list.className =
-                    "downloads-list";
+                }
 
 
+                const data =
+                    await response.json();
 
-                /*
-                    NO DOWNLOADS IN CATEGORY
-                */
+
+                container.innerHTML = "";
+
 
                 if (
-                    !category.downloads ||
-                    category.downloads.length === 0
+                    !data.categories ||
+                    data.categories.length === 0
                 ) {
 
-                    list.innerHTML = `
+                    container.innerHTML = `
 
-                        <div class="message">
-                            Nothing here yet.
+                        <div class="status-message">
+                            No downloads available yet.
                         </div>
 
                     `;
-
-
-                    container.appendChild(list);
 
                     return;
 
                 }
 
 
-
-                /*
-                    CREATE DOWNLOAD CARDS
-                */
-
-                category.downloads.forEach(
-                    item => {
+                data.categories.forEach(category => {
 
 
-                        const download =
-                            document.createElement("div");
+                    const section =
+                        document.createElement("section");
 
 
-                        download.className =
-                            "download-item";
+                    section.className =
+                        "download-section";
 
 
-                        download.innerHTML = `
+                    const heading =
+                        document.createElement("div");
 
-                            <div class="download-icon">
 
-                                <i class="${escapeHTML(category.icon || "fas fa-download")}"></i>
+                    heading.className =
+                        "download-category";
 
+
+                    heading.innerHTML = `
+
+                        <i class="${safeIcon(category.icon)}"></i>
+
+                        <span>
+                            ${escapeHTML(category.name)}
+                        </span>
+
+                    `;
+
+
+                    section.appendChild(heading);
+
+
+                    const list =
+                        document.createElement("div");
+
+
+                    list.className =
+                        "download-list";
+
+
+                    if (
+                        !category.downloads ||
+                        category.downloads.length === 0
+                    ) {
+
+                        list.innerHTML = `
+
+                            <div class="status-message small">
+                                Nothing here yet.
                             </div>
-
-
-                            <div class="download-info">
-
-                                <div class="download-name">
-
-                                    ${escapeHTML(item.name)}
-
-                                </div>
-
-
-                                <div class="download-description">
-
-                                    ${escapeHTML(item.description || "")}
-
-                                </div>
-
-                            </div>
-
-
-                            <a
-                                class="download-button"
-                                href="${escapeAttribute(item.link)}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-
-                                <i class="fas fa-download"></i>
-
-                                <span>
-                                    Download
-                                </span>
-
-                            </a>
 
                         `;
 
+                    }
 
-                        list.appendChild(
-                            download
-                        );
+
+                    else {
+
+                        category.downloads.forEach(item => {
+
+
+                            const card =
+                                document.createElement("div");
+
+
+                            card.className =
+                                "download-card";
+
+
+                            card.innerHTML = `
+
+                                <div class="download-card-icon">
+
+                                    <i class="${safeIcon(category.icon)}"></i>
+
+                                </div>
+
+
+                                <div class="download-details">
+
+                                    <div class="download-name">
+                                        ${escapeHTML(item.name)}
+                                    </div>
+
+                                    <div class="download-description">
+                                        ${escapeHTML(item.description || "")}
+                                    </div>
+
+                                </div>
+
+
+                                <a
+                                    class="download-button"
+                                    href="${safeURL(item.link)}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+
+                                    <i class="fa-solid fa-download"></i>
+
+                                    <span>
+                                        Download
+                                    </span>
+
+                                </a>
+
+                            `;
+
+
+                            list.appendChild(card);
+
+                        });
 
                     }
+
+
+                    section.appendChild(list);
+
+                    container.appendChild(section);
+
+                });
+
+
+            } catch (error) {
+
+                console.error(
+                    "Downloads error:",
+                    error
                 );
 
 
-                container.appendChild(
-                    list
-                );
+                container.innerHTML = `
+
+                    <div class="status-message error-message">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                        <strong>
+                            Downloads could not be loaded.
+                        </strong>
+
+                        <small>
+                            The website could not read downloads.json.
+                        </small>
+
+                    </div>
+
+                `;
 
             }
-        );
 
-    }
-
-
-    catch (error) {
-
-        console.error(error);
+        }
 
 
-        container.innerHTML = `
+        function escapeHTML(value) {
 
-            <div class="error">
+            const element =
+                document.createElement("div");
 
-                <i class="fas fa-triangle-exclamation"></i>
+            element.textContent =
+                String(value ?? "");
 
-                <br><br>
+            return element.innerHTML;
 
-                Downloads could not be loaded.
-
-            </div>
-
-        `;
-
-    }
-
-}
+        }
 
 
-function escapeHTML(text) {
+        function safeIcon(value) {
 
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        String(text);
-
-    return div.innerHTML;
-
-}
+            const icon =
+                String(value || "fa-solid fa-download");
 
 
-function escapeAttribute(text) {
+            if (
+                /^[a-zA-Z0-9 _-]+$/.test(icon)
+            ) {
 
-    return String(text || "")
+                return icon;
 
-        .replaceAll("&", "&amp;")
-
-        .replaceAll('"', "&quot;")
-
-        .replaceAll("<", "&lt;")
-
-        .replaceAll(">", "&gt;");
-
-}
+            }
 
 
-loadDownloads();
+            return "fa-solid fa-download";
 
-</script>
+        }
 
+
+        function safeURL(value) {
+
+            const url =
+                String(value || "").trim();
+
+
+            if (
+                url.startsWith("https://") ||
+                url.startsWith("http://")
+            ) {
+
+                return escapeAttribute(url);
+
+            }
+
+
+            return "#";
+
+        }
+
+
+        function escapeAttribute(value) {
+
+            return String(value)
+
+                .replaceAll("&", "&amp;")
+
+                .replaceAll('"', "&quot;")
+
+                .replaceAll("<", "&lt;")
+
+                .replaceAll(">", "&gt;");
+
+        }
+
+
+        loadDownloads();
+
+    </script>
 
 </body>
-
 </html>
 ```
