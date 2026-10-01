@@ -1,3 +1,4 @@
+```json
 {
     "categories": [
         {
@@ -19,17 +20,17 @@
                     "name": "Moto3 - 2026",
                     "description": "GP Bikes bike download.",
                     "link": "https://gpb-mods.com/moto-3-2026-v0-1/"
-                }
+                },
                 {
                     "name": "WSBK 24",
                     "description": "GP Bikes bike download.",
                     "link": "https://gpb-mods.com/sbk-24/"
-                }
+                },
                 {
                     "name": "Moto2 - 2026",
                     "description": "GP Bikes bike download.",
                     "link": "https://gpb-mods.com/moto2-2026/"
-                }
+                },
                 {
                     "name": "WSSP 24",
                     "description": "GP Bikes bike download.",
@@ -39,4 +40,4 @@
         }
     ]
 }
-
+```
