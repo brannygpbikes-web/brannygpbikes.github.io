@@ -1,0 +1,28 @@
+```json
+{
+    "categories": [
+        {
+            "name": "Tracks",
+            "icon": "fas fa-road",
+            "downloads": [
+                {
+                    "name": "Example Track",
+                    "description": "GP Bikes track download.",
+                    "link": "https://example.com"
+                }
+            ]
+        },
+        {
+            "name": "Bikes",
+            "icon": "fas fa-motorcycle",
+            "downloads": [
+                {
+                    "name": "Example Bike",
+                    "description": "GP Bikes bike download.",
+                    "link": "https://example.com"
+                }
+            ]
+        }
+    ]
+}
+```
