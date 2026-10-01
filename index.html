@@ -1,857 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GP Bikes Academy Ranked</title>
 
-    <title>GP Bikes Academy Ranked</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .player {
+      grid-template-columns: 70px minmax(180px, 1fr) 110px 100px 100px 110px;
+    }
 
-    <link rel="stylesheet" href="./style.css">
+    .sort-button {
+      border: 0;
+      padding: 0;
+      background: none;
+      color: inherit;
+      font: inherit;
+      text-transform: inherit;
+      letter-spacing: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-    <style>
+    .sort-button:hover,
+    .sort-button.active {
+      color: white;
+    }
 
-        /* ==========================================
-           LEADERBOARD - 6 COLUMNS
-           ========================================== */
+    .sort-button i {
+      font-size: 9px;
+      color: #737b87;
+    }
 
-        .player {
-            grid-template-columns:
-                70px
-                minmax(180px, 1fr)
-                110px
-                100px
-                100px
-                110px;
-        }
+    .sort-button.active i {
+      color: #df252d;
+    }
 
+    .races {
+      color: #d1d5db;
+      font-weight: bold;
+    }
 
-        /* ==========================================
-           SORT BUTTONS
-           ========================================== */
+    .podiums {
+      color: #f5c84c;
+      font-weight: bold;
+    }
 
-        .sort-button {
-            appearance: none;
+    @media (max-width: 700px) {
+      .leaderboard {
+        overflow-x: auto;
+      }
 
-            display: flex;
-            align-items: center;
-
-            gap: 6px;
-
-            width: 100%;
-
-            margin: 0;
-            padding: 0;
-
-            border: 0;
-
-            color: inherit;
-            background: none;
-
-            font: inherit;
-
-            text-align: left;
-
-            text-transform: inherit;
-            letter-spacing: inherit;
-
-            cursor: pointer;
-        }
-
-
-        .sort-button:hover {
-            color: #ffffff;
-        }
-
-
-        .sort-button i {
-            color: #737b87;
-
-            font-size: 9px;
-        }
-
-
-        .sort-button.active {
-            color: #ffffff;
-        }
-
-
-        .sort-button.active i {
-            color: #df252d;
-        }
-
-
-        /* ==========================================
-           EXTRA STATS
-           ========================================== */
-
-        .races {
-            color: #d1d5db;
-
-            font-size: 15px;
-
-            font-weight: 700;
-        }
-
-
-        .podiums {
-            color: #f5c84c;
-
-            font-size: 15px;
-
-            font-weight: 700;
-        }
-
-
-        /* ==========================================
-           MOBILE
-           ========================================== */
-
-        @media (max-width: 700px) {
-
-            .leaderboard {
-                overflow-x: auto;
-            }
-
-
-            .player {
-                width: 650px;
-
-                grid-template-columns:
-                    45px
-                    180px
-                    90px
-                    80px
-                    80px
-                    90px;
-            }
-
-
-            .races,
-            .podiums {
-                font-size: 12px;
-            }
-
-        }
-
-    </style>
-
+      .player {
+        width: 650px;
+        grid-template-columns: 45px 180px 90px 80px 80px 90px;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
-
-<!-- ==========================================
-     TOP BAR
-     ========================================== -->
-
 <header class="topbar">
-
-    <div class="brand">
-
-        <i class="fa-solid fa-flag-checkered"></i>
-
-        <span>
-            GP Bikes Academy Ranked
-        </span>
-
-    </div>
-
+  <div class="brand">
+    <i class="fa-solid fa-flag-checkered"></i>
+    <span>GP Bikes Academy Ranked</span>
+  </div>
 </header>
 
-
-
-<!-- ==========================================
-     SIDEBAR
-     ========================================== -->
-
 <nav class="sidebar">
+  <a href="./index.html" class="active">
+    <i class="fa-solid fa-trophy"></i>
+    <span>Ranked</span>
+  </a>
 
+  <a href="./announcements.html">
+    <i class="fa-solid fa-bullhorn"></i>
+    <span>Announcements</span>
+  </a>
 
-    <a href="./index.html"
-       class="active">
+  <a href="./downloads.html">
+    <i class="fa-solid fa-download"></i>
+    <span>Downloads</span>
+  </a>
 
-        <i class="fa-solid fa-trophy"></i>
+  <div class="sidebar-divider"></div>
 
-        <span>
-            Ranked
-        </span>
-
-    </a>
-
-
-    <a href="./announcements.html">
-
-        <i class="fa-solid fa-bullhorn"></i>
-
-        <span>
-            Announcements
-        </span>
-
-    </a>
-
-
-    <a href="./downloads.html">
-
-        <i class="fa-solid fa-download"></i>
-
-        <span>
-            Downloads
-        </span>
-
-    </a>
-
-
-    <div class="sidebar-divider"></div>
-
-
-    <a href="https://discord.gg/NGwKCQ96m8"
-       target="_blank"
-       rel="noopener noreferrer">
-
-        <i class="fa-brands fa-discord"></i>
-
-        <span>
-            Join the Discord
-        </span>
-
-    </a>
-
-
+  <a href="https://discord.gg/NGwKCQ96m8" target="_blank" rel="noopener noreferrer">
+    <i class="fa-brands fa-discord"></i>
+    <span>Join the Discord</span>
+  </a>
 </nav>
 
-
-
-<!-- ==========================================
-     PAGE
-     ========================================== -->
-
 <main class="page">
-
-    <div class="page-content">
-
-
-        <!-- PAGE TITLE -->
-
-        <div class="page-title">
-
-
-            <div>
-
-                <h1>
-                    Ranked
-                </h1>
-
-                <p>
-                    GP Bikes Academy competitive standings
-                </p>
-
-            </div>
-
-
-            <div class="season-badge">
-
-                <span class="live-dot"></span>
-
-                2026 Season
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- ==================================
-             LEADERBOARD
-             ================================== -->
-
-        <section class="panel">
-
-
-            <div class="panel-title">
-
-
-                <div>
-
-                    <i class="fa-solid fa-ranking-star"></i>
-
-                    Leaderboard
-
-                </div>
-
-
-                <span id="sort-description">
-
-                    Elo • Highest first
-
-                </span>
-
-
-            </div>
-
-
-
-            <div class="leaderboard">
-
-
-                <!-- ==========================
-                     COLUMN HEADERS
-                     ========================== -->
-
-                <div class="player leaderboard-header">
-
-
-                    <div>
-                        Rank
-                    </div>
-
-
-                    <div>
-
-                        <button
-                            class="sort-button"
-                            data-sort="name"
-                            type="button">
-
-                            Player
-
-                            <i class="fa-solid fa-sort"></i>
-
-                        </button>
-
-                    </div>
-
-
-                    <div>
-
-                        <button
-                            class="sort-button active"
-                            data-sort="elo"
-                            type="button">
-
-                            Elo
-
-                            <i class="fa-solid fa-arrow-down"></i>
-
-                        </button>
-
-                    </div>
-
-
-                    <div>
-
-                        <button
-                            class="sort-button"
-                            data-sort="wins"
-                            type="button">
-
-                            Wins
-
-                            <i class="fa-solid fa-sort"></i>
-
-                        </button>
-
-                    </div>
-
-
-                    <div>
-
-                        <button
-                            class="sort-button"
-                            data-sort="races"
-                            type="button">
-
-                            Races
-
-                            <i class="fa-solid fa-sort"></i>
-
-                        </button>
-
-                    </div>
-
-
-                    <div>
-
-                        <button
-                            class="sort-button"
-                            data-sort="podiums"
-                            type="button">
-
-                            Podiums
-
-                            <i class="fa-solid fa-sort"></i>
-
-                        </button>
-
-                    </div>
-
-
-                </div>
-
-
-
-                <!-- PLAYER ROWS -->
-
-                <div id="players">
-
-                    <div class="status-message">
-
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-
-                        Loading rankings...
-
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-        </section>
-
-
+  <div class="page-content">
+
+    <div class="page-title">
+      <div>
+        <h1>Ranked</h1>
+        <p>GP Bikes Academy competitive standings</p>
+      </div>
+
+      <div class="season-badge">
+        <span class="live-dot"></span>
+        2026 Season
+      </div>
     </div>
 
+    <section class="panel">
+
+      <div class="panel-title">
+        <div>
+          <i class="fa-solid fa-ranking-star"></i>
+          Leaderboard
+        </div>
+
+        <span id="sort-description">Elo • Highest first</span>
+      </div>
+
+      <div class="leaderboard">
+
+        <div class="player leaderboard-header">
+          <div>Rank</div>
+
+          <div>
+            <button class="sort-button" data-sort="name">
+              Player <i class="fa-solid fa-sort"></i>
+            </button>
+          </div>
+
+          <div>
+            <button class="sort-button active" data-sort="elo">
+              Elo <i class="fa-solid fa-arrow-down"></i>
+            </button>
+          </div>
+
+          <div>
+            <button class="sort-button" data-sort="wins">
+              Wins <i class="fa-solid fa-sort"></i>
+            </button>
+          </div>
+
+          <div>
+            <button class="sort-button" data-sort="races">
+              Races <i class="fa-solid fa-sort"></i>
+            </button>
+          </div>
+
+          <div>
+            <button class="sort-button" data-sort="podiums">
+              Podiums <i class="fa-solid fa-sort"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="players">
+          <div class="status-message">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Loading rankings...
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
 </main>
 
-
-
 <script>
+const ELO_URL = "https://raw.githubusercontent.com/brannygpbikes-web/brannygpbikes.github.io/refs/heads/main/elo_db.json";
 
-
-/* ==========================================
-   DATABASE
-   ========================================== */
-
-const ELO_URL =
-    "https://raw.githubusercontent.com/brannygpbikes-web/brannygpbikes.github.io/refs/heads/main/elo_db.json";
-
-
-let players = [];
-
-
-/*
-    DEFAULT:
-
-    Elo
-    Highest -> Lowest
-*/
-
-let currentSort =
-    "elo";
-
-let currentDirection =
-    "desc";
-
-
-
-/* ==========================================
-   LOAD PLAYERS
-   ========================================== */
+let playerData = [];
+let sortBy = "elo";
+let sortDirection = "desc";
 
 async function loadPlayers() {
+  const container = document.getElementById("players");
 
+  try {
+    const response = await fetch(ELO_URL + "?v=" + Date.now(), {
+      cache: "no-store"
+    });
 
-    const container =
-        document.getElementById("players");
-
-
-    try {
-
-
-        const response =
-            await fetch(
-
-                ELO_URL +
-                "?v=" +
-                Date.now(),
-
-                {
-                    cache: "no-store"
-                }
-
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Database returned HTTP " +
-                response.status
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-
-        /*
-            Use ALL FOUR statistics
-            from elo_db.json.
-        */
-
-        players =
-            Object.entries(data).map(
-
-                ([name, stats]) => ({
-
-                    name: name,
-
-                    elo:
-                        Number(stats.elo) || 0,
-
-                    wins:
-                        Number(stats.wins) || 0,
-
-                    races:
-                        Number(stats.races) || 0,
-
-                    podiums:
-                        Number(stats.podiums) || 0
-
-                })
-
-            );
-
-
-
-        sortPlayers();
-
-
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
     }
 
+    const json = await response.json();
 
-    catch (error) {
+    playerData = Object.entries(json).map(([name, stats]) => ({
+      name,
+      elo: Number(stats.elo) || 0,
+      wins: Number(stats.wins) || 0,
+      races: Number(stats.races) || 0,
+      podiums: Number(stats.podiums) || 0
+    }));
 
+    sortAndRender();
 
-        console.error(
-            "Leaderboard error:",
-            error
-        );
+  } catch (error) {
+    console.error(error);
 
+    container.innerHTML = `
+      <div class="status-message error-message">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <strong>Rankings could not be loaded.</strong>
+        <small>${escapeHTML(error.message)}</small>
+      </div>
+    `;
+  }
+}
 
-        container.innerHTML = `
+function sortAndRender() {
+  playerData.sort((a, b) => {
 
-            <div class="status-message error-message">
+    if (sortBy === "name") {
+      const result = a.name.localeCompare(b.name, undefined, {
+        sensitivity: "base"
+      });
 
-                <i class="fa-solid fa-triangle-exclamation"></i>
-
-                <strong>
-                    Rankings could not be loaded.
-                </strong>
-
-                <small>
-                    The ranking database could not be reached.
-                </small>
-
-            </div>
-
-        `;
-
-
+      return sortDirection === "asc" ? result : -result;
     }
 
+    const aValue = a[sortBy];
+    const bValue = b[sortBy];
 
+    if (aValue === bValue) {
+      if (sortBy !== "elo" && a.elo !== b.elo) {
+        return b.elo - a.elo;
+      }
+
+      return a.name.localeCompare(b.name);
+    }
+
+    return sortDirection === "desc"
+      ? bValue - aValue
+      : aValue - bValue;
+  });
+
+  renderPlayers();
+  updateSortDisplay();
 }
-
-
-
-/* ==========================================
-   SORT
-   ========================================== */
-
-function sortPlayers() {
-
-
-    players.sort(
-
-        (a, b) => {
-
-
-            /*
-                PLAYER NAME
-            */
-
-            if (currentSort === "name") {
-
-
-                const comparison =
-                    a.name.localeCompare(
-
-                        b.name,
-
-                        undefined,
-
-                        {
-                            sensitivity: "base"
-                        }
-
-                    );
-
-
-                return currentDirection === "asc"
-
-                    ? comparison
-
-                    : -comparison;
-
-
-            }
-
-
-
-            /*
-                STAT SORTING
-            */
-
-            const aValue =
-                Number(a[currentSort]) || 0;
-
-
-            const bValue =
-                Number(b[currentSort]) || 0;
-
-
-
-            /*
-                TIE BREAKER
-
-                If equal, highest Elo wins.
-            */
-
-            if (aValue === bValue) {
-
-
-                if (currentSort !== "elo") {
-
-
-                    if (b.elo !== a.elo) {
-
-                        return b.elo - a.elo;
-
-                    }
-
-
-                }
-
-
-                return a.name.localeCompare(
-                    b.name
-                );
-
-
-            }
-
-
-
-            /*
-                HIGH -> LOW
-                or
-                LOW -> HIGH
-            */
-
-            return currentDirection === "desc"
-
-                ? bValue - aValue
-
-                : aValue - bValue;
-
-
-        }
-
-    );
-
-
-
-    renderPlayers();
-
-    updateSortButtons();
-
-
-}
-
-
-
-/* ==========================================
-   DISPLAY LEADERBOARD
-   ========================================== */
 
 function renderPlayers() {
-
-
-    const container =
-        document.getElementById("players");
-
-
-    container.innerHTML = "";
-
-
-
-    if (players.length === 0) {
-
-
-        container.innerHTML = `
-
-            <div class="status-message">
-
-                No ranked players yet.
-
-            </div>
-
-        `;
-
-
-        return;
-
-
-    }
-
-
-
-    players.forEach(
-
-        (player, index) => {
-
-
-            const row =
-                document.createElement("div");
-
-
-            row.className =
-                "player";
-
-
-
-            /*
-                TOP 3 RANK COLOURS
-            */
-
-            let rankClass = "";
-
-
-            if (index === 0) {
-
-                rankClass =
-                    "rank-gold";
-
-            }
-
-
-            else if (index === 1) {
-
-                rankClass =
-                    "rank-silver";
-
-            }
-
-
-            else if (index === 2) {
-
-                rankClass =
-                    "rank-bronze";
-
-            }
-
-
-
-            row.innerHTML = `
-
-
-                <div class="rank ${rankClass}">
-
-                    ${index + 1}
-
-                </div>
-
-
-                <div class="player-name">
-
-                    ${escapeHTML(
-                        player.name
-                    )}
-
-                </div>
-
-
-                <div class="elo">
-
-                    ${formatNumber(
-                        player.elo
-                    )}
-
-                </div>
-
-
-                <div class="wins">
-
-                    ${formatNumber(
-                        player.wins
-                    )}
-
-                </div>
-
-
-                <div class="races">
-
-                    ${formatNumber(
-                        player.races
-                    )}
-
-                </div>
-
-
-                <div class="podiums">
-
-                    ${formatNumber(
-                        player.podiums
-                    )}
-
-                </div>
-
-
-            `;
-
-
-            container.appendChild(
-                row
-            );
-
-
-        }
-
-    );
-
-
+  const container = document.getElementById("players");
+  container.innerHTML = "";
+
+  if (playerData.length === 0) {
+    container.innerHTML = `
+      <div class="status-message">
+        No ranked players yet.
+      </div>
+    `;
+    return;
+  }
+
+  playerData.forEach((player, index) => {
+    const row = document.createElement("div");
+    row.className = "player";
+
+    let rankClass = "";
+
+    if (index === 0) rankClass = "rank-gold";
+    if (index === 1) rankClass = "rank-silver";
+    if (index === 2) rankClass = "rank-bronze";
+
+    row.innerHTML = `
+      <div class="rank ${rankClass}">${index + 1}</div>
+      <div class="player-name">${escapeHTML(player.name)}</div>
+      <div class="elo">${player.elo}</div>
+      <div class="wins">${player.wins}</div>
+      <div class="races">${player.races}</div>
+      <div class="podiums">${player.podiums}</div>
+    `;
+
+    container.appendChild(row);
+  });
 }
 
+document.querySelectorAll(".sort-button").forEach(button => {
+  button.addEventListener("click", () => {
+    const selected = button.dataset.sort;
 
+    if (selected === sortBy) {
+      sortDirection = sortDirection === "desc" ? "asc" : "desc";
+    } else {
+      sortBy = selected;
+      sortDirection = selected === "name" ? "asc" : "desc";
+    }
 
-/* ==========================================
-   CLICK HEADERS TO SORT
-   ========================================== */
+    sortAndRender();
+  });
+});
 
-document
-    .querySelectorAll(".sort-button")
-    .forEach(
+function updateSortDisplay() {
+  const labels = {
+    name: "Player",
+    elo: "Elo",
+    wins: "Wins",
+    races: "Races",
+    podiums: "Podiums"
+  };
 
-        button => {
+  document.querySelectorAll(".sort-button").forEach(button => {
+    const icon = button.querySelector("i");
 
+    button.classList.remove("active");
+    icon.className = "fa-solid fa-sort";
 
-            button.addEventListener(
+    if (button.dataset.sort === sortBy) {
+      button.classList.add("active");
 
-                "click",
+      icon.className = sortDirection === "desc"
+        ? "fa-solid fa-arrow-down"
+        : "fa-solid fa-arrow-up";
+    }
+  });
 
-                () => {
+  let directionText;
 
+  if (sortBy === "name") {
+    directionText = sortDirection === "asc" ? "A–Z" : "Z–A";
+  } else {
+    directionText = sortDirection === "desc"
+      ? "Highest first"
+      : "Lowest first";
+  }
 
-                    const selectedSort =
-                        button.dataset
+  document.getElementById("sort-description").textContent =
+    labels[sortBy] + " • " + directionText;
+}
+
+function escapeHTML(value) {
+  const div = document.createElement("div");
+  div.textContent = String(value ?? "");
+  return div.innerHTML;
+}
+
+loadPlayers();
+</script>
+
+</body>
+</html>
