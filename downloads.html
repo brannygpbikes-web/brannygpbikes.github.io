@@ -74,4 +74,163 @@
       <div id="downloads">
 
         <div class="status-message">
-          <i class="
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Loading downloads...
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+<script>
+const DOWNLOADS_URL =
+  "https://raw.githubusercontent.com/brannygpbikes-web/brannygpbikes.github.io/refs/heads/main/downloads.json";
+
+async function loadDownloads() {
+  const container = document.getElementById("downloads");
+
+  try {
+    const response = await fetch(
+      DOWNLOADS_URL + "?v=" + Date.now(),
+      {
+        cache: "no-store"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+
+    const data = await response.json();
+
+    container.innerHTML = "";
+
+    if (!data.categories || data.categories.length === 0) {
+      container.innerHTML = `
+        <div class="status-message">
+          No downloads available yet.
+        </div>
+      `;
+
+      return;
+    }
+
+    data.categories.forEach(category => {
+      const section = document.createElement("section");
+      section.className = "download-section";
+
+      const heading = document.createElement("div");
+      heading.className = "download-category";
+
+      heading.innerHTML = `
+        <i class="${safeIcon(category.icon)}"></i>
+        <span>${escapeHTML(category.name)}</span>
+      `;
+
+      section.appendChild(heading);
+
+      const list = document.createElement("div");
+      list.className = "download-list";
+
+      if (!category.downloads || category.downloads.length === 0) {
+        list.innerHTML = `
+          <div class="status-message small">
+            Nothing here yet.
+          </div>
+        `;
+      } else {
+        category.downloads.forEach(item => {
+          const card = document.createElement("div");
+          card.className = "download-card";
+
+          card.innerHTML = `
+            <div class="download-card-icon">
+              <i class="${safeIcon(category.icon)}"></i>
+            </div>
+
+            <div class="download-details">
+              <div class="download-name">
+                ${escapeHTML(item.name)}
+              </div>
+
+              <div class="download-description">
+                ${escapeHTML(item.description || "")}
+              </div>
+            </div>
+
+            <a
+              class="download-button"
+              href="${safeURL(item.link)}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i class="fa-solid fa-download"></i>
+              <span>Download</span>
+            </a>
+          `;
+
+          list.appendChild(card);
+        });
+      }
+
+      section.appendChild(list);
+      container.appendChild(section);
+    });
+
+  } catch (error) {
+    console.error("Downloads error:", error);
+
+    container.innerHTML = `
+      <div class="status-message error-message">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+
+        <strong>
+          Downloads could not be loaded.
+        </strong>
+
+        <small>
+          ${escapeHTML(error.message)}
+        </small>
+      </div>
+    `;
+  }
+}
+
+function escapeHTML(value) {
+  const div = document.createElement("div");
+  div.textContent = String(value ?? "");
+  return div.innerHTML;
+}
+
+function safeIcon(value) {
+  const icon = String(value || "fa-solid fa-download");
+
+  if (/^[a-zA-Z0-9 _-]+$/.test(icon)) {
+    return icon;
+  }
+
+  return "fa-solid fa-download";
+}
+
+function safeURL(value) {
+  const url = String(value || "").trim();
+
+  if (
+    url.startsWith("https://") ||
+    url.startsWith("http://")
+  ) {
+    return url;
+  }
+
+  return "#";
+}
+
+loadDownloads();
+</script>
+
+</body>
+</html>
